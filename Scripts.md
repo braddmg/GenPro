@@ -1,6 +1,6 @@
 ---
 layout: page
-title: " "
+title: "Genómica"
 ---
 
 {% if site.show_excerpts %}
