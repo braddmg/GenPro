@@ -1,5 +1,5 @@
 ---
-title:  "Markdown examples"
+title:  "Análisis de comunidades"
 layout: post
 ---
 
