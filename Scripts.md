@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Genómica"
+title: "home"
 ---
 
 {% if site.show_excerpts %}
