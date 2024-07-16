@@ -1,6 +1,6 @@
 ---
 layout: page
-title: ""
+title: " "
 ---
 
 {% if site.show_excerpts %}
