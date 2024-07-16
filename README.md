@@ -5,12 +5,8 @@
 ## Objetivos
 
  - supports dark mode on macOS Mojave
- 
-## Cronograma
----
-Fecha: "14 de agosto"
-Clase: "Introducción a la genética bacteriana"
----
+
+## Recursos
 
 
 
