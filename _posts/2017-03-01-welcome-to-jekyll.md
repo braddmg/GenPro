@@ -1,5 +1,5 @@
 ---
-title: "Welcome to Jekyll"
+title: "Control de calidad y ensamblaje de genomas"
 layout: post
 ---
 
