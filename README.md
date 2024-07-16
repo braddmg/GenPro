@@ -1,6 +1,6 @@
 ---
-title: "About"
-permalink: "/about/"
+Fecha: "14 de agosto"
+Clase: "Introducción a la genética bacteriana"
 layout: page
 ---
 
