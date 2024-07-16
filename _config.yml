@@ -30,8 +30,3 @@ comments:
 
 plugins:
  - jekyll-feed
- 
- feed:
-  categories:
-    - Scripts
-    - Clases
