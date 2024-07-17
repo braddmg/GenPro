@@ -6,7 +6,7 @@ categories: git
 ---
 <html>
 <article>
-<h1> Videotutorial ensamblaje de genomas </h1>
+<h1> Ensamblaje de genomas </h1>
 
 <p> Herramientas utilizadas: </p>
 </article>
