@@ -6,7 +6,7 @@ categories: git
 ---
 <html>
 <article>
-  <header><h1> Ensamblaje de genomas </h1></header>
+  <header><h2> Ensamblaje de genomas </h2></header>
   <p align="justify">Herramientas utilizadas: <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">fastqc</a>, <a href="https://github.com/ablab/spades">SPAdes</a></p>
 </article>
 </html>
