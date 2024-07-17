@@ -1,5 +1,5 @@
 ---
-title: "Control de calidad y ensamblaje de genomas"
+title: "Análisis de comunidades microbianas"
 layout: post
 ---
 
