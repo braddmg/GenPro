@@ -5,7 +5,7 @@ layout: post
 categories: git
 ---
 <article>
-<h2> Videotutorial ensamblaje de genomas </h2>
+<h1> Videotutorial ensamblaje de genomas </h1>
 
 <p> Herramientas utilizadas: </p>
 </article>
