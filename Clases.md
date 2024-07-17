@@ -3,11 +3,7 @@ title: "Presentaciones del curso"
 layout: post
 ---
 <html>
-  <article>
-    <p>
 #Clase 1: [Introducción a la genómica bacteriana] 
-      </p>
-    </article>
 </html>
 
 
