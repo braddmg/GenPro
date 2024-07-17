@@ -1,6 +1,7 @@
 title:  "ProkGen" 
 author: "Bradd Mendoza"
 description: "Bradd Mendoza"
+avatar: "/assets/2.png"
 permalink: /:title/
 lang: "es"
 excerpt_separator: "\n\n\n"
