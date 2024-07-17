@@ -4,7 +4,9 @@ layout: post
 ---
 <html>
   <article>
- <h1> Clase 1: [Introducción a la genómica bacteriana] </h1>
+    <p>
+#Clase 1: [Introducción a la genómica bacteriana] 
+      </p>
     </article>
 </html>
 
