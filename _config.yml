@@ -17,7 +17,7 @@ minimal: faslse             # use a dark header
 # Menu
 
 navigation:                # accepts {file, title, url, icon, sidebaricon}
-  - {file: "Clases", title: "Clases"}
+  - {file: "Clases.md", title: "Clases"}
   - {file: "Scripts.md", title: "Scripts"}
 
 external:                  # shows a footer with social links - for available icons see fontawesome.com/icons
