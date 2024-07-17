@@ -2,9 +2,8 @@
 title: "Presentaciones del curso"
 layout: post
 ---
-<html>
-#Clase 1: [Introducción a la genómica bacteriana] 
-</html>
+# Clase 1: [Introducción a la genómica bacteriana] 
+
 
 
 
