@@ -1,7 +1,7 @@
 ---
 title:  "Videotutoriales"
 mathjax: true
-layout: post
+layout: page
 categories: git
 ---
 <html>
