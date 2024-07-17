@@ -19,7 +19,7 @@ minimal: true             # use a dark header
 navigation:                # accepts {file, title, url, icon, sidebaricon}
   - {file: "Clases.md", title: "Clases"}
   - {file: "Scripts.md", title: "Scripts"}
-  - {file: "videos.md", title: "Videotutoriales"}
+  - {file: "Videos.md", title: "Videotutoriales"}
 
 external:                  # shows a footer with social links - for available icons see fontawesome.com/icons
   - {title: Mail, icon: envelope, url: "mailto:bradd.mendoza@ucr.ac.cr"}
