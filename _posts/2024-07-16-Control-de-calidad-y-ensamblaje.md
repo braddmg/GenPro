@@ -33,7 +33,7 @@ wget -nc -i data.txt
 gzip -d *.gz
 rm data.txt
 ```
-# Fastqc 
+## Fastqc 
 Fastqc es un programa que sirve para evaluar la calidad de las secuencias. Vamos a utilizar un loop para procesar todas las secuencias en un sólo comando.
 ```yaml
 for f in *.fastq; do fastqc "$f" -o ../02.fastqc/; done;
