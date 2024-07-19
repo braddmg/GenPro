@@ -3,15 +3,14 @@ title: "Control de calidad y ensamblaje de genomas"
 layout: post
 ---
 
-# Actualización de algunos paquetes
+## Actualización de algunos paquetes
 
-
-## Generalmente si no se actualiza da errores posteriores
+Generalmente si no se actualiza da errores posteriores
 ```yaml
 pip install matplotlib==3.5.1
 conda install --force-reinstall java-jdk
 ```
-# Instalación Conda
+## Instalación Conda
 ```yaml
 mkdir -p ~/miniconda3
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
@@ -20,15 +19,14 @@ rm -rf ~/miniconda3/miniconda.sh
 ~/miniconda3/bin/conda init bash
 ~/miniconda3/bin/conda init zsh
 ```
-# Instalación Spades
-
+## Instalación Spades
 ```yaml
 wget https://github.com/ablab/spades/releases/download/v4.0.0/SPAdes-4.0.0-Linux.tar.gz
 tar -xzf SPAdes-4.0.0-Linux.tar.gz
 mv SPAdes-4.0.0-Linux SPAdes
 Rm SPAdes-4.0.0-Linux.tar.gz
 ```
-# Instalar múltiples paquetes mediante conda.
+## Instalar múltiples paquetes mediante conda.
 ```yaml
 conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades prokka fastqc bbtools trimmomatic quast
 wget -nc -i data.txt
@@ -36,7 +34,7 @@ gzip -d *.gz
 rm data.txt
 ```
 # Fastqc 
-## Fastqc es un programa que sirve para evaluar la calidad de las secuencias. Vamos a utilizar un loop para procesar todas las secuencias en un sólo comando.
+Fastqc es un programa que sirve para evaluar la calidad de las secuencias. Vamos a utilizar un loop para procesar todas las secuencias en un sólo comando.
 ```yaml
 for f in *.fastq; do fastqc "$f" -o ../02.fastqc/; done;
 ```
