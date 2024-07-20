@@ -3,8 +3,6 @@ title: "Control de calidad y ensamblaje de genomas"
 layout: page
 ---
 ## Actualización de algunos paquetes
-
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
