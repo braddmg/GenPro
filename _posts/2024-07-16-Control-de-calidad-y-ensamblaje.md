@@ -6,12 +6,10 @@ layout: post
 ## Actualización de algunos paquetes
 
 Generalmente si no se actualiza da errores posteriores
- <html>
- <pre><code class="language-css">
+ <html><pre><code class="language-css">
 pip install matplotlib==3.5.1
 conda install --force-reinstall java-jdk
-</code></pre>
-</html>
+</code></pre></html>
 
 ## Instalación Conda
 ```yaml
