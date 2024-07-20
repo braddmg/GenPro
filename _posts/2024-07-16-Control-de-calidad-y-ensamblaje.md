@@ -4,6 +4,7 @@ layout: post
 ---
 ## test 1
 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -38,6 +39,7 @@ layout: post
     border: 1px solid #ccc;
     border-radius: 3px;
     user-select: all; /* Permite seleccionar el texto */
+    color: blue; /* Color del texto azul */
   }
 </style>
 </head>
