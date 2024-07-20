@@ -54,6 +54,7 @@ h1 {
   font-size: 1.3rem;
 }
   </style>
+  
 <script>
  const copyButtonLabel = "Copiar";
 
@@ -88,7 +89,23 @@ async function copyCode(block, button) {
   }, 700);
 }
 </script>
+<style>
+  pre[class*="language-"] {
+  position: relative;
+  margin: 5px 0 ;
+  padding: 1.75rem 0 1.75rem 1rem;
 
+  /* more stuff */
+}
+
+pre[class*="language-"] button{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+
+  /* more stuff */
+}
+</style>
 ## Instalación Conda
 
 ```yaml
