@@ -3,10 +3,10 @@ title: "Control de calidad y ensamblaje de genomas"
 layout: page
 ---
 ## Actualización de algunos paquetes
-<article>
-Se asume que se tiene instalado y actualizado Linux en su computadora.
+```yaml
+Se asume que se tiene instalado y actualizado Linux en su computadora. <br>
 El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
-</article>
+```
 <html lang="en">
 <head>
 <meta charset="UTF-8">
