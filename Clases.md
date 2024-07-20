@@ -1,7 +1,7 @@
 ---
 title: "Presentaciones del curso"
 layout: page
-mathjax: true
+mathjax: false
 ---
 <html>
 <article>
