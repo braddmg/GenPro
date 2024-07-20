@@ -2,24 +2,13 @@
 title: "Control de calidad y ensamblaje de genomas"
 layout: post
 ---
-<!DOCTYPE html>
 ## Actualización de algunos paquetes
 
 Generalmente si no se actualiza da errores posteriores
-
- <p id="myText">pip install matplotlib==3.5.1 <br> conda install --force-reinstall java-jdk</p>
-<button class="btn" onclick="copyContent()">Copy!</button>
-<script>
-  let text = document.getElementById('myText').innerHTML;
-  const copyContent = async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      console.log('Content copied to clipboard');
-    } catch (err) {
-      console.error('Failed to copy: ', err);
-    }
-  }
-</script>
+<main>
+  <pre><code class="language-css"> pip install matplotlib==3.5.1 <br>conda install --force-reinstall java-jdk
+</code></pre>
+</main>
 ## Instalación Conda
 ```yaml
 mkdir -p ~/miniconda3
