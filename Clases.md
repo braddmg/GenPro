@@ -1,6 +1,6 @@
 ---
 title: "Presentaciones del curso"
-layout: post
+layout: page
 ---
 # Clase 1: [Introducción a la genómica bacteriana] 
 
