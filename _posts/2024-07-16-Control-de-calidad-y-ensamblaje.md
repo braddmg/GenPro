@@ -9,7 +9,6 @@ Generalmente si no se actualiza da errores posteriores
   <pre><code class="language-css"> pip install matplotlib==3.5.1 <br>conda install --force-reinstall java-jdk
 </code></pre>
 </main>
-<css>
 *,
 *:before,
 *:after {
@@ -55,8 +54,6 @@ h1 {
   font-size: 1.3rem;
 }
 
-## Instalación Conda
-</css>
 <script>
   const copyButtonLabel = "Copy Code";
 
@@ -91,6 +88,8 @@ async function copyCode(block, button) {
   }, 700);
 }
 </script>
+## Instalación Conda
+
 ```yaml
 mkdir -p ~/miniconda3
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
