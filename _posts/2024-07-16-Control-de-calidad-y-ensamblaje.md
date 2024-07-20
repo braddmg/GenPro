@@ -41,8 +41,7 @@ async function copyCode(block, button) {
     button.innerText = copyButtonLabel;
   }, 700);
 }
-</script>
-<button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell3">
+ <button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell3">
       <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <title>Copy to clipboard</title>
   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -50,6 +49,8 @@ async function copyCode(block, button) {
   <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
 </svg>
     </button> 
+</script>
+
 ## Instalación Conda
 
 ```yaml
