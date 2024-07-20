@@ -9,10 +9,11 @@ layout: page
 Se asume que se tiene instalado y actualizado Linux en su computadora. <br>
 El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
 </article>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copiar Texto</title>
 <style>
   .container {
     position: relative;
@@ -25,9 +26,6 @@ El siguiente comando actualiza dos paquetes complementarios que pueden dar probl
     align-items: center;
   }
   .copy-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
     padding: 5px 10px;
     background-color: #007bff;
     color: white;
@@ -51,7 +49,7 @@ El siguiente comando actualiza dos paquetes complementarios que pueden dar probl
 
 <div class="container">
   <div class="fixed-text" id="myText">pip install matplotlib==3.5.1 <br>conda install --force-reinstall java-jdk</div>
-  <button class="copy-button" onclick="copyText()">Copiar</button>
+  <button class="copy-button" id="copyButton" onclick="copyText()">Copiar</button>
 </div>
 
 <script>
@@ -63,12 +61,20 @@ function copyText() {
   textArea.select();
   document.execCommand("copy");
   document.body.removeChild(textArea);
-  alert("Texto copiado: " + copyText.textContent);
+
+  var copyButton = document.getElementById("copyButton");
+  copyButton.textContent = "Copiado";
+  
+  // Opcionalmente, puedes volver a cambiar el texto después de un tiempo
+  setTimeout(function() {
+    copyButton.textContent = "Copiar";
+  }, 2000); // Cambia el texto a "Copiar" después de 2 segundos (2000 milisegundos)
 }
 </script>
 
 </body>
 </html>
+
 </div>
 ## Instalación Conda
 
