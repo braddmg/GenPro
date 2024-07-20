@@ -1,6 +1,6 @@
 ---
 title: "Control de calidad y ensamblaje de genomas"
-layout: post
+layout: page
 ---
 ## test 1
 
