@@ -1,7 +1,6 @@
 ---
 layout: page
 mathjax: true
-title: "Scripts"
 ---
 
 {% if site.show_excerpts %}
