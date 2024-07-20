@@ -1,6 +1,6 @@
 ---
 title: "Presentaciones del curso"
-layout: post
+layout: page
 ---
 
 <html>
