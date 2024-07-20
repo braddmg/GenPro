@@ -9,12 +9,6 @@ Generalmente si no se actualiza da errores posteriores
 <pre id="codecell3" tabindex="0"><code class="language-css">pip install matplotlib==3.5.1 <br>conda install --force-reinstall java-jdk
 </code></pre>
 <style>
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
-
 pre[class*="language-"] {
   position: relative;
   overflow: auto;
