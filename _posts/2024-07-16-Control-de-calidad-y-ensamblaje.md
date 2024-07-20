@@ -2,51 +2,60 @@
 title: "Control de calidad y ensamblaje de genomas"
 layout: post
 ---
-<div class="profile">
-  <div class="profile-picture"></div>
-  <input type="text" id="username" placeholder="Enter your username">
-</div>
-<style>
-  .profile {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.profile-picture {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: gray;
-  margin-right: 10px;
-}
-
-.username {
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-size: 14px; /* adjust the font size as needed */
-}
-</style>
-<script>
-  // Retrieve the value from the text field
-var usernameInput = document.getElementById("username");
-var username = usernameInput.value;
-
-// Display the username under the profile picture
-var usernameDisplay = document.createElement("div");
-usernameDisplay.innerHTML = username;
-usernameDisplay.classList.add("username");
-document.querySelector(".profile").appendChild(usernameDisplay);
-</script>
 ## Actualización de algunos paquetes
 
 Generalmente si no se actualiza da errores posteriores
+
 <main>
-  <pre><code class="language-css">pip install matplotlib==3.5.1 <br>conda install --force-reinstall java-jdk
-</code></pre>
-</main>
+  <h1>All hail the Clipboard API</h1>
+  <p>Florid, wordly code exposition.</p>
+  <pre><code class="language-css">pip install matplotlib==3.5.1 <br>conda install --force-reinstall java-jdk</code></pre>
+<style>
+  *,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+pre[class*="language-"] {
+  position: relative;
+  overflow: auto;
+
+  /* make space  */
+  margin: 5px 0;
+  padding: 1.75rem 0 1.75rem 1rem;
+  border-radius: 10px;
+}
+
+pre[class*="language-"] button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+
+  font-size: 0.9rem;
+  padding: 0.15rem;
+  background-color: #828282;
+
+  border: ridge 1px #7b7b7c;
+  border-radius: 5px;
+  text-shadow: #c4c4c4 0 0 2px;
+}
+
+pre[class*="language-"] button:hover {
+  cursor: pointer;
+  background-color: #bcbabb;
+}
+
+main {
+  display: grid;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+h1 {
+  font-size: 1.3rem;
+}
+</style>
 <script>
   const copyButtonLabel = "Copy Code";
 
