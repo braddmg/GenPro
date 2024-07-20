@@ -1,5 +1,5 @@
 ---
-title:"Presentaciones del curso"
+title: "Presentaciones del curso"
 layout: post
 ---
 
