@@ -1,6 +1,6 @@
 ---
 title:  "Videotutoriales"
-mathjax: true
+mathjax: false
 layout: page
 categories: git
 ---
