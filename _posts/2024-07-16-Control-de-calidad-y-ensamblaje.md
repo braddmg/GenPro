@@ -12,6 +12,7 @@ pip install matplotlib==3.5.1
 conda install --force-reinstall java-jdk
 </code></pre>
 </html>
+
 ## Instalación Conda
 ```yaml
 mkdir -p ~/miniconda3
