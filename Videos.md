@@ -1,5 +1,5 @@
 ---
-title:  "Videotutoriales
+title: "Videotutoriales"
 layout: page
 ---
 <html>
