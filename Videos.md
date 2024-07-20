@@ -1,7 +1,6 @@
 ---
-title:  "Videotutoriales"
-mathjax: false
-layout: page
+title:  "Videotutoriales
+layout: post
 categories: git
 ---
 <html>
