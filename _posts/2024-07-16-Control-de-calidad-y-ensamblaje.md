@@ -2,11 +2,12 @@
 title: "Control de calidad y ensamblaje de genomas"
 layout: page
 ---
+<div>
 ## Actualización de algunos paquetes
-```yaml
+<article>
 Se asume que se tiene instalado y actualizado Linux en su computadora. <br>
 El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
-```
+</article>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -67,7 +68,7 @@ function copyText() {
 
 </body>
 </html>
-
+</div>
 ## Instalación Conda
 
 ```yaml
