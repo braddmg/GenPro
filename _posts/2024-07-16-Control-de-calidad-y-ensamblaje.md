@@ -6,7 +6,6 @@ layout: post
 
 Generalmente si no se actualiza da errores posteriores
 
-<main>
 <pre><code class="language-css">pip install matplotlib==3.5.1 <br>conda install --force-reinstall java-jdk
 </code></pre>
 <script>
