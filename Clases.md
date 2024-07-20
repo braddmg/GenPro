@@ -1,6 +1,7 @@
 ---
 title: "Presentaciones del curso"
 layout: page
+mathjax: true
 ---
 # Clase 1: [Introducción a la genómica bacteriana] 
 
