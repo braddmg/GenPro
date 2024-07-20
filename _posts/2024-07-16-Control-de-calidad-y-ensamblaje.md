@@ -2,8 +2,9 @@
 title: "Control de calidad y ensamblaje de genomas"
 layout: page
 ---
-<div>
+
 ## Actualización de algunos paquetes
+<div> 
 <article>
 Se asume que se tiene instalado y actualizado Linux en su computadora. <br>
 El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
