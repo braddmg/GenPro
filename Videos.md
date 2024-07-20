@@ -1,6 +1,6 @@
 ---
 title: "Videotutoriales"
-layout: page
+layout: post
 ---
 
 ## Ensamblaje de genomas
