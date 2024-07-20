@@ -2,7 +2,7 @@
 title: "Control de calidad y ensamblaje de genomas"
 layout: page
 ---
-## test 1
+## Actualización de algunos paquetes
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,7 +46,7 @@ layout: page
 <body>
 
 <div class="container">
-  <div class="fixed-text" id="myText">test script</div>
+  <div class="fixed-text" id="myText">pip install matplotlib==3.5.1 <br>conda install --force-reinstall java-jdk</div>
   <button class="copy-button" onclick="copyText()">Copy</button>
 </div>
 
@@ -65,106 +65,6 @@ function copyText() {
 
 </body>
 </html>
-
-
-## test 2
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-  .container {
-    position: relative;
-    margin: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .copy-button {
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  .fixed-text {
-    flex: 1;
-    padding: 5px;
-    margin-right: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    user-select: all; /* Permite seleccionar el texto */
-  }
-</style>
-</head>
-<body>
-
-<div class="container">
-  <div class="fixed-text" id="myText">test script</div>
-  <button class="copy-button" onclick="copyText()">Copy</button>
-</div>
-
-<script>
-function copyText() {
-  var copyText = document.getElementById("myText");
-  var textArea = document.createElement("textarea");
-  textArea.value = copyText.textContent;
-  document.body.appendChild(textArea);
-  textArea.select();
-  document.execCommand("copy");
-  document.body.removeChild(textArea);
-  alert("Texto copiado: " + copyText.textContent);
-}
-</script>
-
-</body>
-</html>
-
-## Actualización de algunos paquetes
-
-Generalmente si no se actualiza da errores posteriores
-
-<pre id="codecell3" tabindex="0"><code class="language-css">pip install matplotlib==3.5.1 <br>conda install --force-reinstall java-jdk
-</code></pre>
-<script>
- const copyButtonLabel = "Copiar";
-
-// use a class selector if available
-let blocks = document.querySelectorAll("pre");
-
-blocks.forEach((block) => {
-  // only add button if browser supports Clipboard API
-  if (navigator.clipboard) {
-    let button = document.createElement("button");
-
-    button.innerText = copyButtonLabel;
-    block.appendChild(button);
-
-    button.addEventListener("click", async () => {
-      await copyCode(block, button);
-    });
-  }
-});
-
-async function copyCode(block, button) {
-  let code = block.querySelector("code");
-  let text = code.innerText;
-
-  await navigator.clipboard.writeText(text);
-
-  // visual feedback that task is completed
-  button.innerText = "Copiado";
-
-  setTimeout(() => {
-    button.innerText = copiarLabel;
-  }, 700);
-}
-</script>
 
 ## Instalación Conda
 
