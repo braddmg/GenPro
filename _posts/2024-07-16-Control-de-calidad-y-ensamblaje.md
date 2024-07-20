@@ -8,6 +8,7 @@ Generalmente si no se actualiza da errores posteriores
 
 <pre id="codecell3" tabindex="0"><code class="language-css">pip install matplotlib==3.5.1 <br>conda install --force-reinstall java-jdk
 </code></pre>
+<style>
 *,
 *:before,
 *:after {
@@ -52,6 +53,7 @@ main {
 h1 {
   font-size: 1.3rem;
 }
+  </style>
 <script>
  const copyButtonLabel = "Copiar";
 
