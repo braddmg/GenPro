@@ -1,7 +1,6 @@
 ---
 title:  "Videotutoriales
-layout: post
-categories: git
+layout: page
 ---
 <html>
 <article>
