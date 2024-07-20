@@ -16,14 +16,13 @@ El siguiente comando actualiza dos paquetes complementarios que pueden dar probl
 <title>Copiar Texto</title>
 <style>
   .container {
-    position: relative;
     margin: 20px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 10px; /* Espacio entre el texto y el botón */
   }
   .copy-button {
     padding: 5px 10px;
@@ -32,16 +31,21 @@ El siguiente comando actualiza dos paquetes complementarios que pueden dar probl
     border: none;
     border-radius: 3px;
     cursor: pointer;
+    /* Alineación vertical */
+    display: flex;
+    align-items: center;
   }
   .fixed-text {
     flex: 1;
     padding: 5px;
-    margin-right: 10px;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 3px;
     user-select: all; /* Permite seleccionar el texto */
     color: blue; /* Color del texto azul */
+    /* Alineación vertical */
+    display: flex;
+    align-items: center;
   }
 </style>
 </head>
