@@ -1,6 +1,5 @@
 ---
 layout: page
-mathjax: true
 ---
 
 {% if site.show_excerpts %}
