@@ -36,7 +36,7 @@ async function copyCode(block, button) {
   await navigator.clipboard.writeText(text);
 
   // visual feedback that task is completed
-  button.innerText = "copiado";
+  button.innerText = "Copiado";
 
   setTimeout(() => {
     button.innerText = copiarLabel;
