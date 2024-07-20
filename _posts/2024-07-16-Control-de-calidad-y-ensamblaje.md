@@ -78,7 +78,6 @@ function copyText() {
 
 </body>
 </html>
-
 </div>
 ## Instalación Conda
 
