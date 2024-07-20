@@ -3,13 +3,7 @@ title: "Presentaciones del curso"
 layout: page
 ---
 
-<html>
-<article>
-  <header><h2> Clase 1: [Introducción a la genómica bacteriana] </h2></header>
-</article>
-</html>
- 
-
+## Clase 1: [Introducción a la genómica bacteriana] 
 
 [Introducción a la genómica bacteriana]: chart.pdf
 [jekyll-gh]:   https://github.com/jekyll/jekyll
