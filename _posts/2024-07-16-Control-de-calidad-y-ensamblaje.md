@@ -45,7 +45,7 @@ layout: page
 
 <div class="container">
   <div class="fixed-text" id="myText">pip install matplotlib==3.5.1 <br>conda install --force-reinstall java-jdk</div>
-  <button class="copy-button" onclick="copyText()">Copy</button>
+  <button class="copy-button" onclick="copyText()">Copiar</button>
 </div>
 
 <script>
