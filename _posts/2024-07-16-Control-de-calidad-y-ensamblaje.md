@@ -2,8 +2,70 @@
 title: "Control de calidad y ensamblaje de genomas"
 layout: post
 ---
-## test
-<!DOCTYPE html>
+## test 1
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  .container {
+    position: relative;
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .copy-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .fixed-text {
+    flex: 1;
+    padding: 5px;
+    margin-right: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    user-select: all; /* Permite seleccionar el texto */
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="fixed-text" id="myText">test script</div>
+  <button class="copy-button" onclick="copyText()">Copy</button>
+</div>
+
+<script>
+function copyText() {
+  var copyText = document.getElementById("myText");
+  var textArea = document.createElement("textarea");
+  textArea.value = copyText.textContent;
+  document.body.appendChild(textArea);
+  textArea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textArea);
+  alert("Texto copiado: " + copyText.textContent);
+}
+</script>
+
+</body>
+</html>
+
+
+## test 2
 <html lang="en">
 <head>
 <meta charset="UTF-8">
