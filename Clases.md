@@ -3,9 +3,12 @@ title: "Presentaciones del curso"
 layout: page
 mathjax: true
 ---
-## Clase 1: [Introducción a la genómica bacteriana] 
-
-
+<html>
+<article>
+  <header><h2>Clase 1: [Introducción a la genómica bacteriana]</h2></header>
+</article>
+</html>
+ 
 
 
 [Introducción a la genómica bacteriana]: chart.pdf
