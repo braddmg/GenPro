@@ -7,8 +7,6 @@ layout: post
 Generalmente si no se actualiza da errores posteriores
 
 <main>
-  <h1>All hail the Clipboard API</h1>
-  <p>Florid, wordly code exposition.</p>
   <pre><code class="language-css">pip install matplotlib==3.5.1 <br>conda install --force-reinstall java-jdk</code></pre>
 <style>
   *,
