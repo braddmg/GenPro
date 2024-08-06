@@ -6,7 +6,8 @@ layout: page
 ## Actualización de algunos paquetes
 <div> 
 <article>
-Se asume que se tiene instalado y actualizado Linux en su computadora. De no ser así, dirijase al siguiente link e instalelo siguiendo las instrucciones: <a href="https://learn.microsoft.com/es-es/windows/wsl/install">Instalar Linux en Windowws </a> <br>
+Se asume que se tiene instalado y actualizado Linux en su computadora. De no ser así, diríjase al siguiente link e instalelo siguiendo las instrucciones: <a href="https://learn.microsoft.com/es-es/windows/wsl/install">Instalar Linux en Windowws </a> <br>
+## Actualiazción de paquetes
 El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
 </article>
 <html lang="es">
@@ -80,15 +81,82 @@ function copyText() {
 </html>
 </div>
 ## Instalación Conda
+</article>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copiar Texto</title>
+<style>
+  .container {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el texto y el botón */
+  }
+  .copy-button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    /* Alineación vertical */
+    display: flex;
+    align-items: center;
+  }
+  .fixed-text {
+    flex: 1;
+    padding: 5px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    user-select: all; /* Permite seleccionar el texto */
+    color: blue; /* Color del texto azul */
+    /* Alineación vertical */
+    display: flex;
+    align-items: center;
+  }
+</style>
+</head>
+<body>
 
-```yaml
-mkdir -p ~/miniconda3
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
-bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
-rm -rf ~/miniconda3/miniconda.sh
-~/miniconda3/bin/conda init bash
-~/miniconda3/bin/conda init zsh
-```
+<div class="container">
+  <div class="fixed-text" id="myText">mkdir -p ~/miniconda3 <br>
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh <br>
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3 <br>
+rm -rf ~/miniconda3/miniconda.sh <br>
+~/miniconda3/bin/conda init bash <br>
+~/miniconda3/bin/conda init zsh</div> <br>
+  <button class="copy-button" id="copyButton" onclick="copyText()">Copiar</button>
+</div>
+
+<script>
+function copyText() {
+  var copyText = document.getElementById("myText");
+  var textArea = document.createElement("textarea");
+  textArea.value = copyText.textContent;
+  document.body.appendChild(textArea);
+  textArea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textArea);
+
+  var copyButton = document.getElementById("copyButton");
+  copyButton.textContent = "Copiado";
+  
+  // Opcionalmente, puedes volver a cambiar el texto después de un tiempo
+  setTimeout(function() {
+    copyButton.textContent = "Copiar";
+  }, 2000); // Cambia el texto a "Copiar" después de 2 segundos (2000 milisegundos)
+}
+</script>
+
+</body>
+</html>
+</div>
 
 ## Instalación Spades
 
