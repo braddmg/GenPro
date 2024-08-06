@@ -1,5 +1,5 @@
 ---
-title: "Control de calidad y ensamblaje de genomas"
+title: "Preparación ambiente Linux"
 layout: page
 ---
 
@@ -58,7 +58,3 @@ Pip install gdown
 gdown --folder 104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing 
 gzip -d *.gz
 ```
-## Fastqc 
-<article>
-Fastqc es un programa que sirve para evaluar la calidad de las secuencias. Vamos a utilizar un loop para procesar todas las secuencias en un sólo comando.
-</article>
