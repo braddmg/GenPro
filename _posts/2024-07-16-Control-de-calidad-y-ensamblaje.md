@@ -157,6 +157,7 @@ function copyText() {
 </html>
 
 ## Instalación Spades
+<div> 
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -229,8 +230,9 @@ function copyText() {
 
 </body>
 </html>
-
+</div>
 ## Instalar múltiples paquetes mediante conda.
+<div>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -303,9 +305,10 @@ function copyText() {
 
 </body>
 </html>
-
+</div>
 ## Fastqc 
 Fastqc es un programa que sirve para evaluar la calidad de las secuencias. Vamos a utilizar un loop para procesar todas las secuencias en un sólo comando.
+<div>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -375,7 +378,7 @@ function copyText() {
 
 </body>
 </html>
-
+</div>
 
 [jekyll-docs]: http://jekyllrb.com/docs/home
 [jekyll-gh]:   https://github.com/jekyll/jekyll
