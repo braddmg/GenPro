@@ -6,13 +6,14 @@ layout: page
 ## Actualización de algunos paquetes
 <article>
 Se asume que se tiene instalado y actualizado Linux en su computadora. De no ser así, diríjase al siguiente link e instalelo siguiendo las instrucciones: <a href="https://learn.microsoft.com/es-es/windows/wsl/install">Instalar Linux en Windowws </a> <br>
-## Actualiazción de paquetes
+</article>
+## Actualización de paquetes
 El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
 
-```yml
+{% highlight c %}
 pip install matplotlib==3.5.1
 conda install --force-reinstall java-jdk
-```
+{% endhighlight %}
 
 
 ## Instalación Conda
