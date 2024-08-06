@@ -6,7 +6,7 @@ layout: page
 ## Actualización de algunos paquetes
 <div> 
 <article>
-Se asume que se tiene instalado y actualizado Linux en su computadora. <br>
+Se asume que se tiene instalado y actualizado Linux en su computadora. De no ser así, dirijase al siguiente link e instalelo siguiendo las instrucciones: <a href="https://learn.microsoft.com/es-es/windows/wsl/install">Instalar Linux en Windowws </a> <br>
 El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
 </article>
 <html lang="es">
