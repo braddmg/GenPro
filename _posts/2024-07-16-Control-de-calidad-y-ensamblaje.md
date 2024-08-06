@@ -10,10 +10,10 @@ Se asume que se tiene instalado y actualizado Linux en su computadora. De no ser
 ## Actualización de paquetes
 El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
 
-{% highlight c %}
+```yml
 pip install matplotlib==3.5.1
 conda install --force-reinstall java-jdk
-{% endhighlight %}
+```
 
 
 ## Instalación Conda
@@ -22,8 +22,11 @@ Conda es un programa que crea un ambiente en Linux dónde podemos cargar diferen
 </article>
 
 ```yml
+#Crear directorio
 mkdir -p ~/miniconda3
+#Descargar archivos
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+#Instalar miniconda
 bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
 rm -rf ~/miniconda3/miniconda.sh
 ~/miniconda3/bin/conda init bash
