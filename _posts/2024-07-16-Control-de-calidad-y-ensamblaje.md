@@ -157,7 +157,7 @@ function copyText() {
 </html>
 
 ## Instalación Spades
-<div> 
+</article>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -201,7 +201,7 @@ function copyText() {
 <body>
 
 <div class="container">
-  <div class="fixed-text" id="myText">wget https://github.com/ablab/spades/releases/download/v4.0.0/SPAdes-4.0.0-Linux.tar.gz <br>
+  <div class="fixed-text" id="myText"> wget https://github.com/ablab/spades/releases/download/v4.0.0/SPAdes-4.0.0-Linux.tar.gz <br>
 tar -xzf SPAdes-4.0.0-Linux.tar.gz <br>
 mv SPAdes-4.0.0-Linux SPAdes <br>
 Rm SPAdes-4.0.0-Linux.tar.gz <br>
@@ -231,6 +231,7 @@ function copyText() {
 </body>
 </html>
 </div>
+
 ## Instalar múltiples paquetes mediante conda.
 <div>
 <html lang="es">
