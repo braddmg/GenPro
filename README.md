@@ -15,6 +15,7 @@ filogenómica y genómica comparativa.
 
 - Objetivo General <br>
   Comprender los fundamentos teóricos y prácticos del análisis de datos genéticos y genómicos de procariotas mediante el uso de técnicas bioinformáticas modernas. <br>
+  <br>
 - Objetivos especificos <br>
   1. Explorar las diferentes bases de datos biológicas
   2. Utilizar de manera básica la terminal de comandos Unix
