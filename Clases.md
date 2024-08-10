@@ -5,7 +5,7 @@ layout: page
  
 ## Clase 1: [Introducción a la genómica bacteriana] 
 
-[Introducción a la genómica bacteriana]: https://github.com/braddmg/ProkGen/blob/main/Clases/Clase_1.pdf
+[Introducción a la genómica bacteriana]: https://github.com/braddmg/ProkGen/raw/main/Clases/Clase_1.pdf
 [jekyll-gh]:   https://github.com/jekyll/jekyll
 [jekyll-talk]: https://talk.jekyllrb.com/
 
