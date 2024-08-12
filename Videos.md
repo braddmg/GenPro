@@ -3,8 +3,8 @@ title: "Videotutoriales"
 layout: page
 ---
 
-## Ensamblaje de genomas
+## Árboles filogenéticos
 
-  <p align="justify">Herramientas utilizadas: <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">fastqc</a>, <a href="https://github.com/ablab/spades">SPAdes</a></p>
+  <p align="justify">Herramientas utilizadas: <a href="https://www.megasoftware.net">MEGA</a>
 
-{% include embed.html url="https://www.youtube.com/embed/_C0A5zX-iqM" %}
+{% include embed.html url="https://www.youtube.com/watch?v=5dQEKkUxqds&t=4163s" %}
