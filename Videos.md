@@ -7,4 +7,4 @@ layout: page
 
   <p align="justify">Herramientas utilizadas: <a href="https://www.megasoftware.net">MEGA</a>
 
-{% include embed.html url="https://www.youtube.com/watch?v=5dQEKkUxqds&t=4163s" %}
+{% include embed.html url="https://www.youtube.com/embed/5dQEKkUxqds?si=4c5SeJkv8kOfOwoW" %}
