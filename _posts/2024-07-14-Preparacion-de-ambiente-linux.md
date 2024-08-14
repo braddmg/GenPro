@@ -50,7 +50,7 @@ Rm SPAdes-4.0.0-Linux.tar.gz
 
 ## Instalar otros paquetes mediante conda.
 ```yml
-conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades prokka fastqc bbtools trimmomatic quast
+conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades prokka fastqc bbtools trimmomatic quast fastp
 ```
 ## Descargar los datos
 ```yml
