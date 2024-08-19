@@ -4,8 +4,9 @@ layout: page
 ---
  
 ## Clase 1: [Introducción a la genómica bacteriana] 
+## Clase 2: [Introducción a la bioinformática]
 
-[Introducción a la genómica bacteriana]: https://github.com/braddmg/ProkGen/raw/main/Clases/Clase_1.pdf
-[jekyll-gh]:   https://github.com/jekyll/jekyll
+[Introducción a la genómica bacteriana]: https://github.com/braddmg/GenPro/raw/main/Clases/Clase_1.pdf
+[Introducción a la bioinformática]:   https://github.com/braddmg/GenPro/raw/main/Clases/Clase%202.pdf
 [jekyll-talk]: https://talk.jekyllrb.com/
 
