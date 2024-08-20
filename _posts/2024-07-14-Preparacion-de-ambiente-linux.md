@@ -3,19 +3,6 @@ title: "Preparación ambiente Linux"
 layout: page
 ---
 
-## Actualización de algunos paquetes
-<article>
-Se asume que se tiene instalado y actualizado Linux en su computadora. De no ser así, diríjase al siguiente link e instalelo siguiendo las instrucciones: <a href="https://learn.microsoft.com/es-es/windows/wsl/install">Instalar Linux en Windowws </a> <br>
-</article>
-## Actualización de paquetes
-El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
-
-```yml
-pip install matplotlib==3.5.1
-conda install --force-reinstall java-jdk
-```
-
-
 ## Instalación Conda
 <article>
 Conda es un programa que crea un ambiente en Linux dónde podemos cargar diferentes paquetes automáticamente y para diferentes aplicaciones
@@ -31,6 +18,18 @@ bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
 rm -rf ~/miniconda3/miniconda.sh
 ~/miniconda3/bin/conda init bash
 ~/miniconda3/bin/conda init zsh
+```
+
+## Actualización de algunos paquetes
+<article>
+Se asume que se tiene instalado y actualizado Linux en su computadora. De no ser así, diríjase al siguiente link e instalelo siguiendo las instrucciones: <a href="https://learn.microsoft.com/es-es/windows/wsl/install">Instalar Linux en Windowws </a> <br>
+</article>
+## Actualización de paquetes
+El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
+
+```yml
+pip install matplotlib==3.5.1
+conda install --force-reinstall java-jdk
 ```
 
 ## Instalación Spades
