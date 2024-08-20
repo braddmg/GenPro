@@ -42,7 +42,7 @@ wget https://github.com/ablab/spades/releases/download/v4.0.0/SPAdes-4.0.0-Linux
 tar -xzf SPAdes-4.0.0-Linux.tar.gz
 #Renombrar y borrar archivo inicial
 mv SPAdes-4.0.0-Linux SPAdes
-Rm SPAdes-4.0.0-Linux.tar.gz
+rm SPAdes-4.0.0-Linux.tar.gz
 ```
 
 ## Instalar otros paquetes mediante conda.
@@ -54,7 +54,7 @@ conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades prokka
 ```
 ## Descargar los datos
 ```yml
-Pip install gdown
+pip install gdown
 gdown --folder 104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing 
 gzip -d *.gz
 ```
