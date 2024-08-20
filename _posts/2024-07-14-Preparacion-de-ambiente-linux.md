@@ -5,6 +5,7 @@ layout: page
 
 ## Instalación Conda
 <article>
+Se asume que se tiene instalado y actualizado Linux en su computadora. De no ser así, diríjase al siguiente link e instalelo siguiendo las instrucciones: <a href="https://learn.microsoft.com/es-es/windows/wsl/install">Instalar Linux en Windowws </a> <br>
 Conda es un programa que crea un ambiente en Linux dónde podemos cargar diferentes paquetes automáticamente y para diferentes aplicaciones
 </article>
 
@@ -21,10 +22,7 @@ rm -rf ~/miniconda3/miniconda.sh
 ```
 
 ## Actualización de algunos paquetes
-<article>
-Se asume que se tiene instalado y actualizado Linux en su computadora. De no ser así, diríjase al siguiente link e instalelo siguiendo las instrucciones: <a href="https://learn.microsoft.com/es-es/windows/wsl/install">Instalar Linux en Windowws </a> <br>
-</article>
-## Actualización de paquetes
+
 El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
 
 ```yml
