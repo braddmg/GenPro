@@ -28,7 +28,7 @@ Se asume que se tiene instalado y actualizado Linux en su computadora. De no ser
 El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
 
 ```yml
-pip install matplotlib==3.5.1
+pip install -U matplotlib
 conda install --force-reinstall java-jdk
 ```
 
