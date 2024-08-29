@@ -2,59 +2,74 @@
 title: "Control de calidad y ensamblaje"
 layout: page
 ---
+## Activar el ambiente Genomics
+```yml
+Conda activate Genomics
+```
 
-## Actualización de algunos paquetes
-<article>
-Se asume que se tiene instalado y actualizado Linux en su computadora. De no ser así, diríjase al siguiente link e instalelo siguiendo las instrucciones: <a href="https://learn.microsoft.com/es-es/windows/wsl/install">Instalar Linux en Windowws </a> <br>
-</article>
-## Actualización de paquetes
-El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
+## Convertir archivo bam a fastq
+Por algún motivo PacBio envía el archivo en fomato BAM, por lo que hay que convertirlo a fastq.
 
 ```yml
-pip install matplotlib==3.5.1
-conda install --force-reinstall java-jdk
+samtools fastq m64268e_240324_144300.subreads.bam > A208b_PacBio.fastq
+```
+## Utilizaremos Fastqc que es un programa que sirve para evaluar la calidad de las secuencias. <br> Vamos a utilizar un loop para procesar todas las secuencias en un sólo comando.
+
+```yml
+for f in *.fastq; do fastqc "$f" -o ../02.fastqc/; done;
+```
+
+## Los archivos estarán en su computadora en una ruta similar a "\\wsl.localhost\Ubuntu\home\user\02.fastqc\" reemplace su usuario.
+
+## Control de calidad con fastq <br> Utiliazremos el parámetro "detect_adapter_per_pe" para detectar si hay residuos de adaptadores de secuenciación y el "- 30" para eliminar secuencias con calidad menor a 30 según el valor de calidad.
+
+```yml
+for i in `ls *_1.fastq.gz | sed 's/_1.fastq.gz//'`; do  fastp -i $i\_1.fastq.gz -I $i\_2.fastq.gz --detect_adapter_for_pe -o ../fastp/$i\_1.fq.gz -O ../fastp/$i\_2.fq.gz -h ../fastp/$i\_fastq.html -e 30; done
+```
+# Ubique los nuevos contis con los comandos cd y ls :)
+
+## Ensamblaje de novo con Spades. Utilizaremos los parámetros "--only-assembler" para que no haga corrección de errores en los reads y los valores de k= 33 y 55 para que sólo haga el ensaamblaje con esos dos valores. Debe ajustar el valor de m según la memoria RAM de la que disponga. Por ejemplo si su computadora tien 16 entonces coloque 8. 
+
+```yml
+../SPAdes/bin/spades.py --isolate --only-assembler -m 8 -1 A208b_1.fq.gz -2 A208b_2.fq.gz -k 33,55 -o ../ASSEMBLY_SPAdes/
+```
+
+## En ensamblaje queda guardado en la carpeta ASSEMBLY_SPAdes y es un archivo llamado contigs.fa. Búsquelo con los comandos cd y ls :)
+## Renombre el archivo contigs.fa, puede utilizar el nombre A208b.fasta (pista, utilice el comando mv)
+
+## Utilizaremos Quast para visualizar las métricas del ensamblaje de calidad del ensamblaje
+
+```yml
+quast.py 208b.fasta -o ../QUAST
+```
+## Si han llegado hasta acá, estoy muy orgulloso!
+## Ahora utilizaremos un comando del software bbtoools para eliminar los contigs menoresa 1000pb.
+
+```yml
+reformat.sh in=A208b.fasta out=A208b_filtered.fasta minlength=1000; done
+```
+
+## Finalmente utilizaremos checkm2 para evaluar la presencia de contaminación
+
+```yml
+checkm2 predict --threads 16 --input A208b_filtered.fasta --output-directory ../checkm2
+```
+
+## Muy bien! Ahora intentemos hacerlo en el servidor del CENAT
+
+## Abra windows powershell en su computadora (no es necerio que sea wsl) o la aplicación MobaXterm
+## Ejecute el siguiente comando reemplazando su usuario. Automáticamente se le solicitará su contraseña y al digitarla no aparecerá en la pantalla por una cuestión de seguridad. Cuando termine presione enter.
+
+```yml
+ssh user@cluster.cenat.ac.cr
+```
+## Utilice el siguiente comando para copiar los datos a su carpeta 
+
+```yml
+cp /work/bmendoza/ejemplo ejemplo
 ```
 
 
-## Instalación Conda
-<article>
-Conda es un programa que crea un ambiente en Linux dónde podemos cargar diferentes paquetes automáticamente y para diferentes aplicaciones
-</article>
 
-```yml
-#Crear directorio
-mkdir -p ~/miniconda3
-#Descargar archivos
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
-#Instalar miniconda
-bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
-rm -rf ~/miniconda3/miniconda.sh
-~/miniconda3/bin/conda init bash
-~/miniconda3/bin/conda init zsh
-```
 
-## Instalación Spades
-<article>
-<a href="https://github.com/ablab/spades">Spades</a> es un programa utilizado para ensamblar genomas de novo. 
-</article>
 
-```yml
-#Obtener archivos
-wget https://github.com/ablab/spades/releases/download/v4.0.0/SPAdes-4.0.0-Linux.tar.gz
-#Descomprimir
-tar -xzf SPAdes-4.0.0-Linux.tar.gz
-#Renombrar y borrar archivo inicial
-mv SPAdes-4.0.0-Linux SPAdes
-Rm SPAdes-4.0.0-Linux.tar.gz
-```
-
-## Instalar otros paquetes mediante conda.
-```yml
-conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades prokka fastqc bbtools trimmomatic quast
-```
-## Descargar los datos
-```yml
-Pip install gdown
-gdown --folder 104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing 
-gzip -d *.gz
-```
