@@ -78,15 +78,45 @@ cp /work/bmendoza/ejemplo ejemplo
 
 ## Convertir archivo bam a fastq
 Por algún motivo PacBio envía el archivo en fomato BAM, por lo que hay que convertirlo a fastq.
-
+Revise que se haya creado la carpeta "ejemplo" y muévase dentro de ella.
 ```yml
+#Convertiremos el archivo bam a fastq
 samtools fastq m64268e_240324_144300.subreads.bam > A208b_PacBio.fastq
 ```
-## Evaluación de contaminación
-Finalmente utilizaremos checkm2 para evaluar la presencia de contaminación
+
+## Visualización de archivos .slurm
+En su carpeta hay varios archivos en formato slurm. Estos los utilizaremos para enviar trabajos remotos de cada programa.
+Ejecute el primer archivo llamado fastp.slurm
+```yml
+cat fastp
+sbatch fastp.slurm
+#Podemos revisar el proceso de nuestro trabajo con el siguiente comando:
+squeue
+```
+Una vez termine nuestro trabajo, podemos abrir el archivo fastp.txt con el comando cat. Este contiene los resultados.
+
+## Ensamblaje híbrido
+Revise el archivo llamado SPAdes.slurm. Entiéndalo antes de enviarlo.
+```yml
+cat SPAdes.slurm
+sbatch SPAdes.slurm
+squeue
+```
+
+## Evaluee la calidad con quast
 
 ```yml
-checkm2 predict --threads 16 --input A208b_filtered.fasta --output-directory ../checkm2
+sbatch quast.slurm
+```
+
+## Evaluación de contaminación
+Finalmente utilizaremos checkm2 para evaluar la presencia de contaminación en la muestra. 
+
+```yml
+cat checkm2.slurm
+sbatch checkm2.slurm
+squeue
+cat checkm2.txt
 ```
 
 
