@@ -103,7 +103,7 @@ sbatch SPAdes.slurm
 squeue
 ```
 
-## Evaluee la calidad con quast
+## Evaluación de la calidad con Quast
 
 ```yml
 sbatch quast.slurm
