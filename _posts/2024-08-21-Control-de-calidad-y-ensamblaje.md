@@ -50,15 +50,18 @@ Renombre el archivo contigs.fa, puede utilizar el nombre A208b.fasta (pista, uti
 ## Utilizaremos Quast para visualizar las métricas del ensamblaje de calidad del ensamblaje
 
 ```yml
-quast.py 208b.fasta -o ../QUAST
+quast.py A208b.fasta -o ../QUAST/A208b
 ```
 Si han llegado hasta acá, estoy muy orgulloso!
 ## Filtrado de contigs
-Ahora utilizaremos un comando del software bbtoools para eliminar los contigs menoresa 1000pb.
+Ahora utilizaremos un comando del software bbtoools para eliminar los contigs menores a 1000pb.
 
 ```yml
-reformat.sh in=A208b.fasta out=A208b_filtered.fasta minlength=1000; done
+#Instalar seqtk
+conda install bioconda::seqtk -n Genomics
+seqtk seq -L 1000 A208b.fasta > A208b_filtered.fasta
 ```
+Vuelva a revisar el nuevo archivo con Quast
 
 ## Uso del Kabré
 Muy bien! Ahora intentemos hacerlo en el servidor del CENAT
