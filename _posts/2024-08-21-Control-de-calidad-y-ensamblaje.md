@@ -45,7 +45,7 @@ spades.py --isolate -m 8 -1 A208b_1.fastq -2 A208b_2.fastq -k 33,55 -o ../ASSEMB
 ```
 
 El ensamblaje queda guardado en la carpeta ASSEMBLY_SPAdes y es un archivo llamado contigs.fa. Búsquelo con los comandos cd y ls :)
-#Renombre el archivo contigs.fa, puede utilizar el nombre A208b.fasta (pista, utilice el comando mv)
+Renombre el archivo contigs.fa, puede utilizar el nombre A208b.fasta (pista, utilice el comando mv)
 
 ## Utilizaremos Quast para visualizar las métricas del ensamblaje de calidad del ensamblaje
 
