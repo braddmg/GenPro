@@ -41,7 +41,7 @@ Utilizaremos los parámetros "--only-assembler" para que no haga corrección de 
 ```yml
 #Instalemos nuevamente SPAdes pero ahora desde conda
 conda install -c bioconda spades -n Genomics
-spades.py --isolate -m 8 -1 A208b_1.fastq -2 A208b_2.fastq -k 33,55 -o ../ASSEMBLY_SPAdes/
+spades.py --isolate -m 8 -1 A208b_1.fq.gz -2 A208b_2.fq.gz -k 33,55 -o ../ASSEMBLY_SPAdes/
 ```
 
 El ensamblaje queda guardado en la carpeta ASSEMBLY_SPAdes y es un archivo llamado contigs.fa. Búsquelo con los comandos cd y ls :)
