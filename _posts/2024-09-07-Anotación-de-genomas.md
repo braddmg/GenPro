@@ -5,7 +5,7 @@ layout: page
 ## Copiaremos los archivos a utilizar
 ```yml
 cp /work/bmendoza/anotacion.slurm anotacion.slurm
-cp /work/bmendoza/A231_12.fasta
+cp /work/bmendoza/A231_12.fasta A231_12.fasta
 ```
 
 ## Anotación con múltiples herramientas 
