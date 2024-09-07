@@ -49,9 +49,10 @@ module load miniconda/eggnog-mapper-2.1.6
 mkdir eggnog
 
 emapper.py -m diamond --itype genome -i A208b_F.fasta --output_dir eggnog/ --cpu 8 -o A208b
-sbatch anotacion.slurm
 ```
-Explore los archivos generados. Muévase en las carpetas y descargue el archivo con de las secuencias de nuleótidos y de aminoácidos.
+## Envíe el slurm a la cola
+Utilice el comando aprendido en la clase anterior para enviar el slurm a la cola. Una veez finalice, explore los archivos generados. Muévase en las carpetas y descargue el archivo con de las secuencias de nuleótidos y de aminoácidos.
+
 ## Descargar archivos sin moba
 Para esto debe abrir una nueva pestaña del powershell o terminal, o bien salir del cluster con el comando exit.
 ```yml
