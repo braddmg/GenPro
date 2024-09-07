@@ -2,12 +2,13 @@
 title: "Anotación de genomas"
 layout: page
 ---
-## Activar el ambiente Genomics
+## copiaremos los archivos a utilizar
 ```yml
-conda activate Genomics
+cp /work/bmendoza/*.slurm
+#Qué significa el *.slurm?
 ```
 
-## Evaluación de la calidad de los reads
+## Utilizaremos Prokka para ensamblar!
 Utilizaremos Fastqc que es un programa que sirve para evaluar la calidad de las secuencias.
 
 ```yml
