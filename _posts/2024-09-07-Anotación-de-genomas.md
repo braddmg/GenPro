@@ -9,7 +9,7 @@ cp /work/bmendoza/A231_12.fasta A231_12.fasta
 ```
 
 ## Anotación con múltiples herramientas 
-Vamos a utilizar diferentes herramientas vistas en la primera mitad de la clase. Es bueno que sepan que hay muchos recursos disponibles y que siempre es muy anotar con varias para comparar. Somo vamos a trabajar con un sólo slurm, ábralo y entiéndalo. Consulte si tiene dudas. 
+Vamos a utilizar diferentes herramientas vistas en la primera mitad de la clase. Es bueno que sepan que hay muchos recursos disponibles y que es recomendado anotar con varias para comparar. Vamos a trabajar con un sólo slurm, ábralo y entiéndalo. Consulte si tiene dudas. 
 ```yml
 cat anotacion.slurm
 #El archivo es el siguiente:
