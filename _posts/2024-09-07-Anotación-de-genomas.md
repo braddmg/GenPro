@@ -2,6 +2,13 @@
 title: "Anotación de genomas"
 layout: page
 ---
+## Conectarse al servidor Kabré
+A partir de ahora trabajaremos en el clúster computacional del CENAT.
+```yml
+#Para conectarse reemplace su usuario
+user@cluster.cenat.ac.cr
+#Digite su contraseña
+```
 ## Copiaremos los archivos a utilizar
 ```yml
 cp /work/bmendoza/anotacion.slurm anotacion.slurm
