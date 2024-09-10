@@ -11,14 +11,14 @@ user@cluster.cenat.ac.cr
 ```
 ## Copiaremos los archivos a utilizar
 ```yml
-cp /work/bmendoza/anotacion.slurm anotacion.slurm
-cp /work/bmendoza/A231_12.fasta A231_12.fasta
+cp /work/bmendoza/CURSO/annot.slurm annot.slurm
+cp /work/bmendoza/CURSO/A231_12.fasta A231_12.fasta
 ```
 
 ## Anotación con múltiples herramientas 
 Vamos a utilizar diferentes herramientas vistas en la primera mitad de la clase. Es bueno que sepan que hay muchos recursos disponibles y que es recomendado anotar con varias para comparar. Vamos a trabajar con un sólo slurm, ábralo y entiéndalo. Consulte si tiene dudas. 
 ```yml
-cat anotacion.slurm
+cat annot.slurm
 #El archivo es el siguiente:
 
 #!/bin/bash
