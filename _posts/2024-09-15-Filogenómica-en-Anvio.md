@@ -18,8 +18,12 @@ df -h /home/user
 ```yml
 cp /work/bmendoza/CURSO/anvio/Agrobacterium/anvio.slurm anvio.slurm
 cp /work/bmendoza/CURSO/anvio/Agrobacterium/pan.slurm pan.slurm
+cp /work/bmendoza/CURSO/anvio/Agrobacterium/taxonomy.slurm taxonomy.slurm
+cp /work/bmendoza/CURSO/anvio/Agrobacterium/drep.slurm drep.slurm
 cp -r /work/bmendoza/CURSO/anvio/Agrobacterium/Agro Agro
-cp -r /work/bmendoza/CURSO/anvio/Agrobacterium/Agro Agro-GENOMES.db
+cp -r /work/bmendoza/CURSO/anvio/Agrobacterium/Agro-GENOMES.db Agro-GENOMES.db
+cp -r /work/bmendoza/CURSO/anvio/Agrobacterium/A208b.db A208b.db
+
 ```
 
 ## Anotación con múltiples herramientas 
