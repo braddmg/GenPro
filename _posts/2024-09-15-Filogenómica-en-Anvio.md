@@ -9,11 +9,12 @@ A partir de ahora trabajaremos en el clúster computacional del CENAT.
 user@cluster.cenat.ac.cr
 #Digite su contraseña
 ```
-## Verifique cuanto espacio tiene usado el cluster y cuánto le queda disponible. Necesitaremos por lo menos 6Gb libres para poder correr los análisis
+## Verifique cuanto espacio tiene usado el cluster y cuánto le queda disponible. 
+Necesitaremos por lo menos 6gb libres para poder correr los análisis
 ```yml
 df -h /home/user
 ```
-
+Si no tiene 6gb libres puede borrar los archivos anterior que hemos usado con el comando rm -r *
 ## Copiaremos los archivos a utilizar
 ```yml
 cp /work/bmendoza/CURSO/anvio/Agrobacterium/anvio.slurm anvio.slurm
