@@ -24,6 +24,7 @@ cp /work/bmendoza/CURSO/anvio/Agrobacterium/drep.slurm drep.slurm
 cp -r /work/bmendoza/CURSO/anvio/Agrobacterium/Agro Agro
 cp -r /work/bmendoza/CURSO/anvio/Agrobacterium/Agro-GENOMES.db Agro-GENOMES.db
 cp -r /work/bmendoza/CURSO/anvio/Agrobacterium/A208b.db A208b.db
+mkdir fasta
 cp -r /work/bmendoza/CURSO/anvio/Agrobacterium/fasta/*.fasta fasta
 
 ```
