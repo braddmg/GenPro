@@ -4,7 +4,7 @@ layout: page
 ---
 ## Instalación de anvio
 Vamos a utilizar wsl nuevamente para instalar Anvio y poder visualizar los análisis pangenómicos. Primero preparemos un ambiente llamado anvio-8. Si no tiene wsl, baje al final y revise cómo correrlo en el cluster.
-El tutorial está basado en el mismo de la página de anvio
+El tutorial está basado en el mismo de la página de <a href="https://merenlab.org/2016/11/08/pangenomics-v2/">Anvio</a> <br> 
 ```yml
 #Actualizar conda
 conda update conda
@@ -63,6 +63,7 @@ ssh -L 8080:localhost:8080 user@cluster.cenat.ac.cr
 ```
 Ahora copien la carpeta y ejecuten el slurm
 ```yml
+module load miniconda/anvio-7.1
 cp -r /work/bmendoza/CURSO/PROCHLORO PROCHLORO
 sbatch pangenome.slurm
 ```
