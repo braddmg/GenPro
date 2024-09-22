@@ -3,7 +3,7 @@ title: "Pangenómica"
 layout: page
 ---
 ## Instalación de anvio
-Vamos a utilizar wsl nuevamente para instalar Anvio y poder visualizar los análisis pangenómicos. Primero preparemos un ambiente llamado anvio-8
+Vamos a utilizar wsl nuevamente para instalar Anvio y poder visualizar los análisis pangenómicos. Primero preparemos un ambiente llamado anvio-8. Si no tiene wsl, baje al final y revise cómo correrlo en el cluster.
 ```yml
 #Actualizar conda
 conda update conda
@@ -53,10 +53,20 @@ anvi-import-misc-data layer-additional-data.txt \
                       -p PROCHLORO/Prochlorococcus_Pan-PAN.db \
                       --target-data-table layers
 ```
+## Análisis en Kabré
+Para los que no tienen wsl (:C) ingresen al cluster pero ahora utilizando el siguiente comando:
+
+Ahora copien la carpeta y ejecuten el slurm
+```yml
+cp -r /work/bmendoza/CURSO/PROCHLORO PROCHLORO
+sbatch pangenome.slurm
+```
+A
 ## Visualización del Pangenoma
 ```yml
 anvi-display-pan -g PROCHLORO-GENOMES.db \
                  -p PROCHLORO/Prochlorococcus_Pan-PAN.db
 ```
 Para visualizar el pangenoma, vaya a su navegador de confianza y pegue la siguiente dirección: http://localhost:8080
+
 
