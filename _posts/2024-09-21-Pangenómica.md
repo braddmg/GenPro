@@ -55,18 +55,32 @@ anvi-import-misc-data layer-additional-data.txt \
 ```
 ## Análisis en Kabré
 Para los que no tienen wsl (:C) ingresen al cluster pero ahora utilizando el siguiente comando:
-
+```yml
+#Para conectarse reemplace su usuario
+ssh -L 8080:localhost:8080 user@cluster.cenat.ac.cr
+#Digite su contraseña
+```
 Ahora copien la carpeta y ejecuten el slurm
 ```yml
 cp -r /work/bmendoza/CURSO/PROCHLORO PROCHLORO
 sbatch pangenome.slurm
 ```
-A
+De aquí en adelante tanto los que trabajen con wsl como los que trabajen con el clúster deben ejecutar los comandos directamente en la terminal.
 ## Visualización del Pangenoma
 ```yml
 anvi-display-pan -g PROCHLORO-GENOMES.db \
                  -p PROCHLORO/Prochlorococcus_Pan-PAN.db
 ```
 Para visualizar el pangenoma, vaya a su navegador de confianza y pegue la siguiente dirección: http://localhost:8080
-
+## Importar layers
+```yml
+anvi-import-state -p PROCHLORO/Prochlorococcus_Pan-PAN.db \
+                  --state pan-state.json \
+                  --name default
+```
+## Nueva visualización 
+```yml
+anvi-display-pan -g PROCHLORO-GENOMES.db \
+                 -p PROCHLORO/Prochlorococcus_Pan-PAN.db
+```
 
