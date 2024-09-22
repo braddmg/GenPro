@@ -4,6 +4,7 @@ layout: page
 ---
 ## Instalación de anvio
 Vamos a utilizar wsl nuevamente para instalar Anvio y poder visualizar los análisis pangenómicos. Primero preparemos un ambiente llamado anvio-8. Si no tiene wsl, baje al final y revise cómo correrlo en el cluster.
+El tutorial está basado en el mismo de la página de anvio
 ```yml
 #Actualizar conda
 conda update conda
