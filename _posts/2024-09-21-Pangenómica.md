@@ -29,6 +29,14 @@ curl -L https://github.com/merenlab/anvio/releases/download/v8/anvio-8.tar.gz \
 #Instalación con pip
 pip install anvio-8.tar.gz
 ```
+Si el comando anterior no sirve, hay que reinstalar una dependencia de forma manual.
+```yml
+wget https://files.pythonhosted.org/packages/c4/aa/94c42a2dd30c4923bffe3ab59e4416c3f7e72dbd32a89bcdd8d43ff1d5d7/datrie-0.8.2-pp373-pypy36_pp73-win32.whl
+mv datrie-0.8.2-pp373-pypy36_pp73-win32.whl datrie-0.8.2-cp310-none-any.whl
+pip install datrie-0.8.2-cp310-none-any.whl
+#Probamos de nuevo
+pip install anvio-8.tar.gz
+```
 Muy bien! Ahora descarguemos los fatos
 ```yml
 wget https://ndownloader.figshare.com/files/28834476 -O Prochlorococcus_31_genomes.tar.gz
