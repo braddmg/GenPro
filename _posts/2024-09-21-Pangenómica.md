@@ -59,7 +59,7 @@ anvi-import-misc-data layer-additional-data.txt \
 Para los que no tienen wsl (:C) ingresen al cluster pero ahora utilizando el siguiente comando:
 ```yml
 #Para conectarse reemplace su usuario
-ssh -L 8080:localhost:8080 user@cluster.cenat.ac.cr
+ssh -p 22022 -L 8080:localhost:8080 usuario@kabre.cenat.ac.cr
 #Digite su contraseña
 ```
 Ahora copien la carpeta y ejecuten el slurm
