@@ -8,6 +8,7 @@ El tutorial está basado en el mismo de la página de <a href="https://merenlab.
 ```yml
 #Actualizar conda
 conda update conda
+pip install matplotlib==3.5.1
 conda create -y --name anvio-8 python=3.10
 conda activate anvio-8
 ```
