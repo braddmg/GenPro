@@ -1,5 +1,5 @@
 ---
-title: "Genómica comparatia"
+title: "Genómica comparativa"
 layout: page
 ---
 ## Visualización
