@@ -60,9 +60,18 @@ conda create -n Genomics
 #Instalar paquetes en el ambiente
 conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades prokka fastqc bbtools trimmomatic quast fastp -n Genomics
 ```
+## Si tiene MAC use los siguientes comandos
+```yml
+#Crear ambiente llamado fastp
+conda create -n fastp
+#Instalar paquetes en el ambiente
+conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 fastp -n fastp
+conda install y -c conda-forge -c bioconda -c AgBiome python=3.10 spades -n spades
+```
 ## Descargar los datos
 ```yml
 pip install gdown
 gdown --folder 104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing 
+cd /Data
 gzip -d *.gz
 ```
