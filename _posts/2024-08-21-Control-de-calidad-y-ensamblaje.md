@@ -13,14 +13,10 @@ Utilizaremos Fastqc que es un programa que sirve para evaluar la calidad de las 
 ```yml
 #Primero descomprimimos los archivos
 gzip -d *.gz
-#Debe crear la carpeta 02.fastqc para que el programa se ejecute correctamente
-fastqc *.fastq -o ../02.fastqc/
-```
-Si no funciona el comando reinstale conda con el siguiente comando y vuelva a ejecutar
-```yml
 conda deactivate
-conda install -c bioconda -c conda-forge fastqc -n fastqc
+conda create -c bioconda -c conda-forge fastqc -n fastqc
 conda activate fastqc
+#Debe crear la carpeta 02.fastqc para que el programa se ejecute correctamente
 fastqc *.fastq -o ../02.fastqc/
 ```
 Los archivos estarán en su computadora en una ruta similar a "\\wsl.localhost\Ubuntu\home\user\02.fastqc\" reemplace su usuario. Abra el archivo en formato html
