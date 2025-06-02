@@ -37,7 +37,22 @@ El siguiente comando actualiza dos paquetes complementarios que pueden dar probl
 pip install -U matplotlib
 conda install --force-reinstall java-jdk
 ```
+#Crear ambiente llamado Genomics
+```yml
+conda create -n Genomics
+#Instalar paquetes en el ambiente
+conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades prokka fastqc bbtools trimmomatic quast fastp -n Genomics
+```
+# Para MAC
 
+```yml
+conda create -n Genomics
+conda activate Genomics
+#Instalar paquetes en el ambiente
+brew install fastqc
+conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 fastp -n Genomics
+conda install y -c conda-forge -c bioconda -c AgBiome python=3.10 spades -n Genomics
+```
 ## Descargar los datos
 ```yml
 pip install gdown
