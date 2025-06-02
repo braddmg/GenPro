@@ -38,36 +38,6 @@ pip install -U matplotlib
 conda install --force-reinstall java-jdk
 ```
 
-## Instalación Spades
-<article>
-<a href="https://github.com/ablab/spades">Spades</a> es un programa utilizado para ensamblar genomas de novo. 
-</article>
-
-```yml
-#Obtener archivos
-wget https://github.com/ablab/spades/releases/download/v4.0.0/SPAdes-4.0.0-Linux.tar.gz
-#Descomprimir
-tar -xzf SPAdes-4.0.0-Linux.tar.gz
-#Renombrar y borrar archivo inicial
-mv SPAdes-4.0.0-Linux SPAdes
-rm SPAdes-4.0.0-Linux.tar.gz
-```
-
-## Instalar otros paquetes mediante conda.
-```yml
-#Crear ambiente llamado Genomics
-conda create -n Genomics
-#Instalar paquetes en el ambiente
-conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades prokka fastqc bbtools trimmomatic quast fastp -n Genomics
-```
-## Si tiene MAC use los siguientes comandos
-```yml
-#Crear ambiente llamado fastp
-conda create -n fastp
-#Instalar paquetes en el ambiente
-conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 fastp -n fastp
-conda install y -c conda-forge -c bioconda -c AgBiome python=3.10 spades -n spades
-```
 ## Descargar los datos
 ```yml
 pip install gdown
