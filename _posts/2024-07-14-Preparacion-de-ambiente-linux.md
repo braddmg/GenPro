@@ -39,17 +39,21 @@ conda install --force-reinstall java-jdk
 ```
 #Crear ambiente llamado Genomics
 ```yml
+#ambiente para ejecutar fastqc
+conda create -c bioconda -c conda-forge fastqc -n fastqc
+#Ambiente para fastp y spades
 conda create -n Genomics
 #Instalar paquetes en el ambiente
-conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades prokka fastqc bbtools trimmomatic quast fastp -n Genomics
+conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades fastp -n Genomics
 ```
 # Para MAC
 
 ```yml
-conda create -n Genomics
-conda activate Genomics
-#Instalar paquetes en el ambiente
+conda create -n fastqc
+conda activate fastqc
 brew install fastqc
+conda create -n Genomics
+#Instalar paquetes en el ambiente
 conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 fastp -n Genomics
 conda install y -c conda-forge -c bioconda -c AgBiome python=3.10 spades -n Genomics
 ```
@@ -57,6 +61,6 @@ conda install y -c conda-forge -c bioconda -c AgBiome python=3.10 spades -n Geno
 ```yml
 pip install gdown
 gdown --folder 104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing 
-cd /Data
+cd Data
 gzip -d *.gz
 ```
