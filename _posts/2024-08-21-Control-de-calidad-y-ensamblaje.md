@@ -2,24 +2,17 @@
 title: "Control de calidad y ensamblaje"
 layout: page
 ---
-## Activar el ambiente Genomics
-```yml
-conda activate Genomics
-```
 
 ## Evaluación de la calidad de los reads
 Utilizaremos Fastqc que es un programa que sirve para evaluar la calidad de las secuencias.
 
 ```yml
-#Primero descomprimimos los archivos
-gzip -d *.gz
-conda deactivate
-conda create -c bioconda -c conda-forge fastqc -n fastqc
+#Activamos el ambiente fastqc
 conda activate fastqc
-#Debe crear la carpeta 02.fastqc para que el programa se ejecute correctamente
-fastqc *.fastq -o ../02.fastqc/
+#Debe crear la carpeta fastqc_results para que el programa se ejecute correctamente
+fastqc *.fastq -o .fastqc_results
 ```
-Los archivos estarán en su computadora en una ruta similar a "\\wsl.localhost\Ubuntu\home\user\02.fastqc\" reemplace su usuario. Abra el archivo en formato html
+Los archivos estarán en su computadora en una ruta similar a "\\wsl.localhost\Ubuntu\home\user\Data\fastqc_results\" reemplace su usuario. Abra el archivo en formato html
 
 ## Control de calidad con fastp
 Utiliazremos el parámetro "detect_adapter_per_pe" para detectar si hay residuos de adaptadores de secuenciación y el "- 30" para eliminar secuencias con calidad menor a 30 según el valor de calidad. Cree la carpeta fastp en el home antes de ejecutar el comando. 
