@@ -59,8 +59,12 @@ conda install y -c conda-forge -c bioconda -c AgBiome python=3.10 spades -n Geno
 ```
 ## Descargar los datos
 ```yml
+#cree una carpeta llamada clas, dónde ejecutaremos todo
+mkdir clase
+#Muévase a la carpeta con el comando cd
+cd clase/
+#Descargue los datos a utilizar
 pip install gdown
 gdown --folder 104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing 
 cd Data
-gzip -d *.gz
 ```
