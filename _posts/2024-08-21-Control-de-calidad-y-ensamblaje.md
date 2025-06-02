@@ -22,7 +22,7 @@ Utiliazremos el parámetro "detect_adapter_per_pe" para detectar si hay residuos
 #Debe crear la carpeta "../03.fastp", inténtelo. 
 conda deactivate
 conda activate Genomics
-for i in `ls *_1.fastq.gz | sed 's/_1.fastq.gz//'`; do  fastp -i $i\_1.fastq.gz -I $i\_2.fastq.gz --detect_adapter_for_pe -o ../03.fastp/$i\_1.fq.gz -O ../03.fastp/$i\_2.fq.gz -h ../fastp/$i\_fastq.html -e 30; done
+for i in `ls *_1.fastq.gz | sed 's/_1.fastq.gz//'`; do  fastp -i $i\_1.fastq.gz -I $i\_2.fastq.gz --detect_adapter_for_pe -o ../03.fastp/$i\_1.fq.gz -O ../03.fastp/$i\_2.fq.gz -h ../03.fastp/$i\_fastq.html -e 30; done
 ```
 Ubique los nuevos contis con los comandos cd y ls :)
 
