@@ -66,5 +66,6 @@ cd clase/
 #Descargue los datos a utilizar
 pip install gdown
 gdown --folder 104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing 
-cd Data
+mv Data 01.Data
+cd 01.Data
 ```
