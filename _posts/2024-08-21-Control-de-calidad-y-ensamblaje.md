@@ -9,8 +9,9 @@ Utilizaremos Fastqc que es un programa que sirve para evaluar la calidad de las 
 ```yml
 #Activamos el ambiente fastqc
 conda activate fastqc
-#Debe crear la carpeta fastqc_results para que el programa se ejecute correctamente
-fastqc *.fastq -o .fastqc_results
+#Debe crear la carpeta 02.fastqc para que el programa se ejecute correctamente
+mkdir ../02.fastqc
+fastqc *.fastq -o ../02.fastqc
 ```
 Los archivos estarán en su computadora en una ruta similar a "\\wsl.localhost\Ubuntu\home\user\Data\fastqc_results\" reemplace su usuario. Abra el archivo en formato html
 
@@ -20,16 +21,16 @@ Utiliazremos el parámetro "detect_adapter_per_pe" para detectar si hay residuos
 ```yml
 conda deactivate
 conda activate Genomics
-for i in `ls *_1.fastq | sed 's/_1.fastq//'`; do  fastp -i $i\_1.fastq -I $i\_2.fastq --detect_adapter_for_pe -o ../fastp/$i\_1.fq.gz -O ../fastp/$i\_2.fq.gz -h ../fastp/$i\_fastq.html -e 30; done
+for i in `ls *_1.fastq.gz | sed 's/_1.fastq.gz//'`; do  fastp -i $i\_1.fastq.gz -I $i\_2.fastq.gz --detect_adapter_for_pe -o ../03.fastp/$i\_1.fq.gz -O ../03.fastp/$i\_2.fq.gz -h ../fastp/$i\_fastq.html -e 30; done
 ```
 Ubique los nuevos contis con los comandos cd y ls :)
 
 ## Ensamblaje de novo con Spades. 
-Utilizaremos los parámetros "--only-assembler" para que no haga corrección de errores en los reads y los valores de k= 33 y 55 para que sólo haga el ensaamblaje con esos dos valores. Debe ajustar el valor de m según la memoria RAM de la que disponga. Por ejemplo si su computadora tien 16 entonces coloque 8. 
+Utilizaremos los parámetros "--only-assembler" para que no haga corrección de errores en los reads y los valores de k= 33 y 55 para que sólo haga el ensaamblaje con esos dos valores. Debe ajustar el valor de m según la memoria RAM de la que disponga. Por ejemplo si su computadora tien 16 entonces coloque 14, deje unos 2gb para que no muera. 
 
 ```yml
 #Instalemos nuevamente SPAdes pero ahora desde conda
-conda install -c bioconda spades -n Genomics
+conda activate Genomics
 spades.py --isolate -m 8 -1 A208b_1.fq.gz -2 A208b_2.fq.gz -k 33,55 -o ../ASSEMBLY_SPAdes/
 ```
 
