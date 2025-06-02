@@ -30,8 +30,8 @@ Ubique los nuevos contis con los comandos cd y ls :)
 Utilizaremos los parámetros "--only-assembler" para que no haga corrección de errores en los reads y los valores de k= 33 y 55 para que sólo haga el ensaamblaje con esos dos valores. Debe ajustar el valor de m según la memoria RAM de la que disponga. Por ejemplo si su computadora tien 16 entonces coloque 14, deje unos 2gb para que no muera. 
 
 ```yml
-#Instalemos nuevamente SPAdes pero ahora desde conda
-conda activate Genomics
+# muévase a la carpeta dónde están los resultados de fastp.
+#Ejecute el siguiente comando para el ensamblaje.
 spades.py --isolate -m 8 -1 A208b_1.fq.gz -2 A208b_2.fq.gz -k 33,55 -o ../ASSEMBLY_SPAdes/
 ```
 
