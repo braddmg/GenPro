@@ -19,6 +19,7 @@ Los archivos estarán en su computadora en una ruta similar a "\\wsl.localhost\U
 Utiliazremos el parámetro "detect_adapter_per_pe" para detectar si hay residuos de adaptadores de secuenciación y el "- 30" para eliminar secuencias con calidad menor a 30 según el valor de calidad. Cree la carpeta fastp en el home antes de ejecutar el comando. 
 
 ```yml
+#Debe crear la carpeta "../03.fastp", inténtelo. 
 conda deactivate
 conda activate Genomics
 for i in `ls *_1.fastq.gz | sed 's/_1.fastq.gz//'`; do  fastp -i $i\_1.fastq.gz -I $i\_2.fastq.gz --detect_adapter_for_pe -o ../03.fastp/$i\_1.fq.gz -O ../03.fastp/$i\_2.fq.gz -h ../fastp/$i\_fastq.html -e 30; done
