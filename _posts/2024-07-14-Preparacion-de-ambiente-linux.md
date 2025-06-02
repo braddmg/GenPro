@@ -37,7 +37,7 @@ El siguiente comando actualiza dos paquetes complementarios que pueden dar probl
 pip install -U matplotlib
 conda install --force-reinstall java-jdk
 ```
-#Crear ambiente llamado Genomics
+#Crear ambientes a utilizar
 ```yml
 #ambiente para ejecutar fastqc
 conda create -c bioconda -c conda-forge fastqc -n fastqc
