@@ -49,6 +49,7 @@ conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades fastp 
 # Para MAC
 
 ```yml
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 conda create -n fastqc
 conda activate fastqc
 brew install fastqc
