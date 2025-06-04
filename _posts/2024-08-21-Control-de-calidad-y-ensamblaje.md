@@ -63,8 +63,16 @@ conda deactivate
 conda activate prokka
 prokka --outdir ../06.Prokka --prefix A208b A208b.fasta
 ```
+#Si tiene MAC
+```yml
+conda create -n prokka
+conda deactivate
+conda activate prokka
+brew install brewsci/bio/prokka
+prokka --outdir ../06.Prokka --prefix A208b A208b.fasta
+
 # Phylogenomics made easy
-Vamos a ejecutar GenFlow, que nos da como output un árbol filogenómico con un sólo comando. 
+Vamos a ejecutar GenFlow, que nos da como output un árbol filogenómico con un sólo comando. Sorry, no lo he estandarizado para MAC :(
 ```yml
 #Descargue el repositorio del github
 cd #esto los devuelve al home
