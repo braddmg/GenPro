@@ -32,7 +32,7 @@ Utilizaremos los parámetros "--only-assembler" para que no haga corrección de 
 ```yml
 # muévase a la carpeta dónde están los resultados de fastp.
 #Ejecute el siguiente comando para el ensamblaje.
-spades.py --isolate -m 8 -1 A208b_1.fq.gz -2 A208b_2.fq.gz -k 33,55 -o ../ASSEMBLY_SPAdes/
+spades.py --isolate -m 8 -1 A208b_1.fq.gz -2 A208b_2.fq.gz -k 33,55 -o ../04.ASSEMBLY_SPAdes/
 ```
 
 El ensamblaje queda guardado en la carpeta ASSEMBLY_SPAdes y es un archivo llamado contigs.fa. Búsquelo con los comandos cd y ls :)
@@ -41,18 +41,67 @@ Renombre el archivo contigs.fa, puede utilizar el nombre A208b.fasta (pista, uti
 ## Utilizaremos Quast para visualizar las métricas del ensamblaje de calidad del ensamblaje
 
 ```yml
+conda deactivate
+conda create -c bioconda -c conda-forge quast -n quast
+conda activate quast
 quast.py A208b.fasta -o ../QUAST/A208b
 ```
 Si han llegado hasta acá, estoy muy orgulloso!
 ## Filtrado de contigs
 Ahora utilizaremos un comando del software bbtoools para eliminar los contigs menores a 1000pb.
-
 ```yml
 #Instalar seqtk
 conda install bioconda::seqtk -n Genomics
 seqtk seq -L 1000 A208b.fasta > A208b_filtered.fasta
 ```
 Vuelva a revisar el nuevo archivo con Quast
+# Anotación con Prokka
+Utilizaremos Prokka para ver los genes anotados
+```yml
+conda create -c conda-forge -c bioconda -c defaults prokka -n prokka
+conda deactivate
+conda activate prokka
+prokka --outdir ../06.Prokka --prefix A208b A208b.fasta
+```
+# Phylogenomics made easy
+Vamos a ejecutar GenFlow, que nos da como output un árbol filogenómico con un sólo comando. 
+```yml
+#Descargue el repositorio del github
+cd #esto los devuelve al home
+git clone https://github.com/braddmg/GenFlow.git
+#Muévase a la nueva carpeta
+cd GenFlow
+#Crear un nuevo ambiente utilizando un archivo de configuración
+conda env create -f GenFlow.yml
+conde deactivate
+conda activate GenFlow
+#Ejecutar la configuración del script
+bash setup.sh
+#Reinicie el ambiente y pruebe que todo funcione con el comando GenFlow
+conda deactivate
+conda activate GenFlow
+GenFlow -h
+```
+Si se muestra el mensaje de help, entonces la instalación funcionó sin problemas.
+En la carpeta 01.Data hay un archivo que se llama "references.txt" este tiene una lista de códigos que usaremos como genomas de referencia.
+```yml
+#Cree una nueva carpeta
+cd
+mkdir 07.Phylogenomics
+#Mueva el archivo con la lista de genomas
+mv 01.Data/references.txt 07.Phylogenomics/
+#Mueva su genoma a la misma carpeta
+mv 04.ASSEMBLY_SPAdes/A208b.fasta 07.Phylogenomics/
+cd 07.Phylogenomics/
+```
+Una vez dentro de la carpeta 07.Phylogenomics revise si ya tiene los archivos (el fasta y el txt) con el comando ls. Y ejecute el comando GenFlow.
+```yml
+GenFlow -g references.txt -f A208b.fasta -t 12 -G 0.8 -F 0.8
+cd results/
+ls
+```
+En la carpeta results, debe tener un archivo .tree y varios archivos .svg que son los heatmap con los valores de ANI.
+El archivo .tree puede visualizarlo en la página de [iTOL](https://itol.embl.de).
 
 ## Uso del Kabré
 Muy bien! Ahora intentemos hacerlo en el servidor del CENAT
