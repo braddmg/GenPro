@@ -73,7 +73,7 @@ git clone https://github.com/braddmg/GenFlow.git
 cd GenFlow
 #Crear un nuevo ambiente utilizando un archivo de configuración
 conda env create -f GenFlow.yml
-conde deactivate
+conda deactivate
 conda activate GenFlow
 #Ejecutar la configuración del script
 bash setup.sh
