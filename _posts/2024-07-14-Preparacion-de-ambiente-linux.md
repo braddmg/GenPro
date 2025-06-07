@@ -45,6 +45,9 @@ conda create -c bioconda -c conda-forge fastqc -n fastqc
 conda create -n Genomics
 #Instalar paquetes en el ambiente
 conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades fastp -n Genomics
+# Instalar otros ambientes
+conda create -c bioconda -c conda-forge quast -n quast
+conda create -c conda-forge -c bioconda -c defaults prokka -n prokka
 ```
 # Para MAC
 
