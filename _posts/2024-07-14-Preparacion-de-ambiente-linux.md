@@ -73,3 +73,5 @@ gdown --folder 104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing
 mv Data 01.Data
 cd 01.Data
 ```
+Si tiene MAC debe descargarlos manualmente con el siguiente link de [google drive](https://drive.google.com/drive/folders/104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing
+)
