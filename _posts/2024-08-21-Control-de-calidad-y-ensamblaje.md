@@ -42,23 +42,14 @@ Renombre el archivo contigs.fa, puede utilizar el nombre A208b.fasta (pista, uti
 
 ```yml
 conda deactivate
-conda create -c bioconda -c conda-forge quast -n quast
 conda activate quast
 quast.py A208b.fasta -o ../QUAST/A208b
 ```
 Si han llegado hasta acá, estoy muy orgulloso!
-## Filtrado de contigs
-Ahora utilizaremos un comando del software bbtoools para eliminar los contigs menores a 1000pb.
-```yml
-#Instalar seqtk
-conda install bioconda::seqtk -n Genomics
-seqtk seq -L 1000 A208b.fasta > A208b_filtered.fasta
-```
-Vuelva a revisar el nuevo archivo con Quast
+
 # Anotación con Prokka
 Utilizaremos Prokka para ver los genes anotados
 ```yml
-conda create -c conda-forge -c bioconda -c defaults prokka -n prokka
 conda deactivate
 conda activate prokka
 prokka --outdir ../06.Prokka --prefix A208b A208b.fasta
@@ -70,7 +61,7 @@ conda deactivate
 conda activate prokka
 brew install brewsci/bio/prokka
 prokka --outdir ../06.Prokka --prefix A208b A208b.fasta
-
+```
 # Phylogenomics made easy
 Vamos a ejecutar GenFlow, que nos da como output un árbol filogenómico con un sólo comando. Sorry, no lo he estandarizado para MAC :(
 ```yml
