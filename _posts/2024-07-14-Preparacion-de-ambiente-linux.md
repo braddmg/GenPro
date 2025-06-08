@@ -60,6 +60,15 @@ conda create -n Genomics
 #Instalar paquetes en el ambiente
 conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 fastp -n Genomics
 conda install y -c conda-forge -c bioconda -c AgBiome python=3.10 spades -n Genomics
+conda deactivate
+conda create -n prokka
+conda activate prokka
+brew install brewsci/bio/prokka
+conda deactivate
+conda create -n quast
+conda activate quast
+brew install quast
+conda deactivate
 ```
 ## Descargar los datos
 ```yml
