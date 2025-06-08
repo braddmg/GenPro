@@ -90,7 +90,7 @@ mkdir 07.Phylogenomics
 #Mueva el archivo con la lista de genomas
 mv 01.Data/references.txt 07.Phylogenomics/
 #Mueva su genoma a la misma carpeta
-mv 04.ASSEMBLY_SPAdes/A208b.fasta 07.Phylogenomics/
+cp 04.ASSEMBLY_SPAdes/A208b.fasta 07.Phylogenomics/
 cd 07.Phylogenomics/
 ```
 Una vez dentro de la carpeta 07.Phylogenomics revise si ya tiene los archivos (el fasta y el txt) con el comando ls. Y ejecute el comando GenFlow.
