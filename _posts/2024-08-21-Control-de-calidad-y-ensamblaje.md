@@ -11,7 +11,7 @@ Utilizaremos Fastqc que es un programa que sirve para evaluar la calidad de las 
 conda activate fastqc
 #Debe crear la carpeta 02.fastqc para que el programa se ejecute correctamente
 mkdir ../02.fastqc
-fastqc *.fastq -o ../02.fastqc
+fastqc *.fastq.gz -o ../02.fastqc
 ```
 Los archivos estarán en su computadora en una ruta similar a "\\wsl.localhost\Ubuntu\home\user\Data\fastqc_results\" reemplace su usuario. Abra el archivo en formato html
 
