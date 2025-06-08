@@ -85,7 +85,7 @@ Si se muestra el mensaje de help, entonces la instalación funcionó sin problem
 En la carpeta 01.Data hay un archivo que se llama "references.txt" este tiene una lista de códigos que usaremos como genomas de referencia.
 ```yml
 #Cree una nueva carpeta
-cd
+cd ~/clase
 mkdir 07.Phylogenomics
 #Mueva el archivo con la lista de genomas
 mv 01.Data/references.txt 07.Phylogenomics/
