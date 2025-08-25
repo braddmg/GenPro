@@ -108,7 +108,7 @@ Abra windows powershell en su computadora (no es necerio que sea wsl) o la aplic
 Ejecute el siguiente comando reemplazando su usuario. Automáticamente se le solicitará su contraseña y al digitarla no aparecerá en la pantalla por una cuestión de seguridad. Cuando termine presione enter.
 
 ```yml
-ssh user@cluster.cenat.ac.cr
+ssh -p 22022 user@cluster.cenat.ac.cr
 ```
 Utilice el siguiente comando para copiar los datos a su carpeta 
 ```yml
