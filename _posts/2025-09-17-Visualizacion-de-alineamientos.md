@@ -35,6 +35,6 @@ mv2.savefig("plot2.png")
 Otra versión
 ```yml
 mv3 = MsaViz(msa_file, wrap_length=60, color_scheme="Flower", show_count=True, start=100, end=160, show_seq_char=False, show_consensus=True, consensus_color="tomato")
-mv4.savefig("plot3.png")
+mv3.savefig("plot3.png")
 ```
 
