@@ -27,3 +27,14 @@ msa= "aligned.fas" # Generamos un objeto llamado msa, que contiene el archivo fa
 mv = MsaViz(msa) # mv es un nuevo objeto que va a guardar el resultado de la función "MsaViz" que contiene toda la información necesaria para la visualización
 mv.savefig("plot.png") # el ".savefig" indica que guardemos la figura que está dentro del archivo que creameos previamente llamado "mv". En los paréntesis y en comillas pueden poner el nombre que quieran ponerle
 ```
+Nueva versión del gráfico
+```yml
+mv2 = MsaViz(msa, wrap_length=60, show_grid=True, show_consensus=True)
+mv2.savefig("plot2.png")
+```
+Otra versión
+```yml
+mv3 = MsaViz(msa_file, wrap_length=60, color_scheme="Flower", show_count=True, start=100, end=160, show_seq_char=False, show_consensus=True, consensus_color="tomato")
+mv4.savefig("plot3.png")
+```
+
