@@ -43,7 +43,7 @@ Vamos a añadir una marca en la mutación encontrada
 mv3.add_markers([555], color="red", marker="x") # la posición dónde está la mutación es la 555 de la secuencia de ref.
 mv3.savefig("plot_with_mark.png") # Guarda el nuevo plot con el nombre, plot with mark
 ```
-## Tarea
+## Práctica
 
 Repita lo mismo pero con el archivo de aminoácidos que generaremos en clase. 
 La tarea será generar la imagen señalando la mutación pero en la secuencia de aminoácidos.
@@ -57,3 +57,7 @@ mv.add_text_annotation((709, 720), "Adenylytation motif", text_color="red", rang
 mv.savefig("Fic_plot.png")
 
 ```
+
+## Tarea
+Busque al menos 3 (pueden ser más) secuencias de algún gen de interés en diferentes especies y anote alguna de las mutaciones y gaps (indels) encontrados. 
+Debe dar una breve introducción del gen utilizado.
