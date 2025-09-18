@@ -9,7 +9,6 @@ layout: page
 pip install gdown # Instalará una herramienta que permite descargar archivos desde google drive
 gdown --folder  
 cd clase_alineamientos # El comando "cd" le permite moverse de un directorio (carpeta) a otro. Debe poner la dirección del nuevo directorio.
-
 ```
 
 Instalar la herramienta a utilizar, la documentación está disponible aquí https://moshi4.github.io/pyMSAviz/getting_started
