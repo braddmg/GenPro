@@ -1,6 +1,6 @@
 ---
 title: "Visualización de alineamientos"
-layout: page
+layout: markdown
 ---
 
 ## Descargue los datos e instale los paquetes
