@@ -5,7 +5,7 @@ layout: page
 
 ## Descargue los datos e instale los paquetes
 
-```bash
+```yml
 pip install gdown # Instalará una herramienta que permite descargar archivos desde google drive
 gdown --folder  
 cd clase_alineamientos # El comando "cd" le permite moverse de un directorio (carpeta) a otro. Debe poner la dirección del nuevo directorio.
