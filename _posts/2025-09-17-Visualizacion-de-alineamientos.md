@@ -34,7 +34,25 @@ mv2.savefig("plot2.png")
 ```
 Otra versión
 ```yml
-mv3 = MsaViz(msa, wrap_length=60, color_scheme="Flower", show_count=True, start=100, end=160, show_seq_char=False, show_consensus=True, consensus_color="tomato")
+mv3 = MsaViz(msa, wrap_length=60, color_scheme="Flower", show_count=True, start=370, end=760, show_seq_char=False, show_consensus=True, consensus_color="tomato")
 mv3.savefig("plot3.png")
 ```
+Vamos a añadir una marca en la mutación encontrada
 
+```yml
+mv3.add_markers([555], color="red", marker="x") # la posición dónde está la mutación es la 555 de la secuencia de ref.
+mv3.savefig("plot_with_mark.png") # Guarda el nuevo plot con el nombre, plot with mark
+```
+
+Repita lo mismo pero con el archivo de aminoácidos que generaremos en clase. 
+La tarea será generar la imagen señalando la mutación pero en la secuencia de aminoácidos.
+
+# Otro ejemplo con proteínas FIC
+Estas proteínas son sacadas de este artículo https://academic.oup.com/femsle/article/doi/10.1093/femsle/fnaf092/8244153#531429867 en dónde estudiamos los plásmidos de H. pylori. Son proteínas relacionadas con patogenicidad pero también con sistemas toxina-antitoxina. Todas deberían tener el "motif" *HxFx(D/E)GNGRxxR*
+```yml
+msa= "fic_aligned.fas"
+mv = MsaViz(msa, wrap_length=50, color_scheme="Flower", show_count=True, show_seq_char=True, show_cons\ensus=True, consensus_color="tomato", start=540)
+mv.add_text_annotation((709, 720), "Adenylytation motif", text_color="red", range_color="red")
+mv.savefig("Fic_plot.png")
+
+```
