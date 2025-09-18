@@ -1,51 +1,28 @@
 ---
-title: "Preparación ambiente Linux"
+title: "Visualización de alineamientos"
 layout: page
 ---
 
-## Instalación Conda
-<article>
-Se asume que se tiene instalado y actualizado Linux en su computadora. De no ser así, diríjase al siguiente link e instalelo siguiendo las instrucciones: <a href="https://learn.microsoft.com/es-es/windows/wsl/install">Instalar Linux en Windowws </a> <br>
-Conda es un programa que crea un ambiente en Linux dónde podemos cargar diferentes paquetes automáticamente y para diferentes aplicaciones
-</article>
+## Descargue los datos
 
 ```yml
-#Crear directorio
-mkdir -p ~/miniconda3
-#Descargar archivos
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
-#Instalar miniconda
-bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
-rm -rf ~/miniconda3/miniconda.sh
-~/miniconda3/bin/conda init bash
-~/miniconda3/bin/conda init zsh
+pip install gdown # Instalará una herramienta que permite descargar archivos desde google drive
+gdown --folder  
+cd clase_alineamientos # El comando "cd" le permite moverse de un directorio (carpeta) a otro. Debe poner la dirección del nuevo directorio.
+
 ```
-## Si tiene MAC use el siguiente comando
+
+Instalar la herramienta a utilizar, la documentación está disponible aquí https://moshi4.github.io/pyMSAviz/getting_started
 ```yml
-mkdir -p ~/miniconda3
-curl https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh -o ~/miniconda3/miniconda.sh
-bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
-rm ~/miniconda3/miniconda.sh
+conda create -n pymsaviz -c conda-forge -c bioconda pymsaviz -y 
+conda activate pymsaviz
+python
 ```
-Cierra y vuelva a abrir la terminal
-
-## Actualización de algunos paquetes
-
-El siguiente comando actualiza dos paquetes complementarios que pueden dar problemas en comandos posteriores.
+Al Ejecucutar el comando "python" se le abrirá un tipo de nueva interfaz dónde los códigos que ejecutemos deben ser de python. 
+Los siguientes comando crearan figuras de alineamiento.
 
 ```yml
-pip install -U matplotlib
-conda install --force-reinstall java-jdk
-```
-#Crear ambientes a utilizar
-```yml
-#ambiente para ejecutar fastqc
-conda create -c bioconda -c conda-forge fastqc -n fastqc
-#Ambiente para fastp y spades
-conda create -n Genomics
-#Instalar paquetes en el ambiente
-conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades fastp -n Genomics
-# Instalar otros ambientes
-conda create -c bioconda -c conda-forge quast -n quast
-conda create -c conda-forge -c bioconda -c defaults prokka -n prokka
-```
+from pymsaviz import MsaViz # En python hay que especificar qué funciones queremos importar. En esta caso sólo utilizaremos la función MsaViz de la librería pymsaviz
+msa= "aligned.fas" # Generamos un objeto llamado msa, que contiene el archivo fasta con las secuencias alineadas.
+mv = MsaViz(msa) # mv es un nuevo objeto que va a guardar el resultado de la función "MsaViz" que contiene toda la información necesaria para la visualización
+mv.savefig("plot.png") # el ".savefig" indica que guardemos la figura que está dentro del archivo que creameos previamente llamado "mv". En los paréntesis y en comillas pueden poner el nombre que quieran ponerle
