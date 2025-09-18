@@ -3,7 +3,7 @@ title: "Visualización de alineamientos"
 layout: page
 ---
 
-## Descargue los datos
+## Descargue los datos e instale los paquetes
 
 ```yml
 pip install gdown # Instalará una herramienta que permite descargar archivos desde google drive
@@ -21,6 +21,7 @@ python
 Al Ejecucutar el comando "python" se le abrirá un tipo de nueva interfaz dónde los códigos que ejecutemos deben ser de python. 
 Los siguientes comando crearan figuras de alineamiento.
 
+## Visualización con el paquete pymsaviz
 ```yml
 from pymsaviz import MsaViz # En python hay que especificar qué funciones queremos importar. En esta caso sólo utilizaremos la función MsaViz de la librería pymsaviz
 msa= "aligned.fas" # Generamos un objeto llamado msa, que contiene el archivo fasta con las secuencias alineadas.
@@ -43,11 +44,12 @@ Vamos a añadir una marca en la mutación encontrada
 mv3.add_markers([555], color="red", marker="x") # la posición dónde está la mutación es la 555 de la secuencia de ref.
 mv3.savefig("plot_with_mark.png") # Guarda el nuevo plot con el nombre, plot with mark
 ```
+## Tarea
 
 Repita lo mismo pero con el archivo de aminoácidos que generaremos en clase. 
 La tarea será generar la imagen señalando la mutación pero en la secuencia de aminoácidos.
 
-# Otro ejemplo con proteínas FIC
+## Otro ejemplo con proteínas FIC
 Estas proteínas son sacadas de este artículo https://academic.oup.com/femsle/article/doi/10.1093/femsle/fnaf092/8244153#531429867 en dónde estudiamos los plásmidos de H. pylori. Son proteínas relacionadas con patogenicidad pero también con sistemas toxina-antitoxina. Todas deberían tener el "motif" *HxFx(D/E)GNGRxxR*
 ```yml
 msa= "fic_aligned.fas"
