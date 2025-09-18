@@ -26,3 +26,4 @@ from pymsaviz import MsaViz # En python hay que especificar qué funciones quere
 msa= "aligned.fas" # Generamos un objeto llamado msa, que contiene el archivo fasta con las secuencias alineadas.
 mv = MsaViz(msa) # mv es un nuevo objeto que va a guardar el resultado de la función "MsaViz" que contiene toda la información necesaria para la visualización
 mv.savefig("plot.png") # el ".savefig" indica que guardemos la figura que está dentro del archivo que creameos previamente llamado "mv". En los paréntesis y en comillas pueden poner el nombre que quieran ponerle
+```
