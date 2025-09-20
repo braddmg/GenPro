@@ -46,7 +46,6 @@ mv3.savefig("plot_with_mark.png") # Guarda el nuevo plot con el nombre, plot wit
 ## Práctica
 
 Repita lo mismo pero con el archivo de aminoácidos que generaremos en clase. 
-La tarea será generar la imagen señalando la mutación pero en la secuencia de aminoácidos.
 
 ## Otro ejemplo con proteínas FIC
 Estas proteínas son sacadas de este artículo https://academic.oup.com/femsle/article/doi/10.1093/femsle/fnaf092/8244153#531429867 en dónde estudiamos los plásmidos de H. pylori. Son proteínas relacionadas con patogenicidad pero también con sistemas toxina-antitoxina. Todas deberían tener el "motif" *HxFx(D/E)GNGRxxR*
