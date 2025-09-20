@@ -7,7 +7,7 @@ layout: page
 
 ```yml
 pip install gdown # Instalará una herramienta que permite descargar archivos desde google drive
-gdown --folder  
+gdown --folder https://drive.google.com/drive/folders/1Sk4rzPMWpA5nLGr1bwt4JOB2yKQUKfd0
 cd clase_alineamientos # El comando "cd" le permite moverse de un directorio (carpeta) a otro. Debe poner la dirección del nuevo directorio.
 ```
 
