@@ -11,7 +11,7 @@ gdown --folder https://drive.google.com/drive/folders/1Sk4rzPMWpA5nLGr1bwt4JOB2y
 cd clase_alineamientos # El comando "cd" le permite moverse de un directorio (carpeta) a otro. Debe poner la dirección del nuevo directorio.
 ```
 
-Instalar la herramienta a utilizar, la documentación está disponible aquí https://moshi4.github.io/pyMSAviz/getting_started
+Instalar la herramienta a utilizar, la documentación está disponible [aquí](https://moshi4.github.io/pyMSAviz/getting_started). 
 ```yml
 conda create -n pymsaviz -c conda-forge -c bioconda pymsaviz -y 
 conda activate pymsaviz
@@ -48,7 +48,7 @@ mv3.savefig("plot_with_mark.png") # Guarda el nuevo plot con el nombre, plot wit
 Repita lo mismo pero con el archivo de aminoácidos que generaremos en clase. 
 
 ## Otro ejemplo con proteínas FIC
-Estas proteínas son sacadas de este artículo https://academic.oup.com/femsle/article/doi/10.1093/femsle/fnaf092/8244153#531429867 en dónde estudiamos los plásmidos de H. pylori. Son proteínas relacionadas con patogenicidad pero también con sistemas toxina-antitoxina. Todas deberían tener el "motif" *HxFx(D/E)GNGRxxR*
+Estas proteínas son sacadas de [este artículo](https://academic.oup.com/femsle/article/doi/10.1093/femsle/fnaf092/8244153#531429867)  en dónde estudiamos los plásmidos de *H. pylori*. Son proteínas relacionadas con patogenicidad pero también con sistemas toxina-antitoxina. Todas deberían tener el "motif" *HxFx(D/E)GNGRxxR*
 ```yml
 msa= "fic_aligned.fas"
 mv = MsaViz(msa, wrap_length=50, color_scheme="Flower", show_count=True, show_seq_char=True, show_cons\ensus=True, consensus_color="tomato", start=540)
