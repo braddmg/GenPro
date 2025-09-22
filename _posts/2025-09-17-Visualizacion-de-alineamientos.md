@@ -51,7 +51,7 @@ Repita lo mismo pero con el archivo de aminoácidos que generaremos en clase.
 Estas proteínas son sacadas de [este artículo](https://academic.oup.com/femsle/article/doi/10.1093/femsle/fnaf092/8244153#531429867)  en dónde estudiamos los plásmidos de *H. pylori*. Son proteínas relacionadas con patogenicidad pero también con sistemas toxina-antitoxina. Todas deberían tener el "motif" *HxFx(D/E)GNGRxxR*
 ```yml
 msa= "fic_aligned.fas"
-mv = MsaViz(msa, wrap_length=50, color_scheme="Flower", show_count=True, show_seq_char=True, show_cons\ensus=True, consensus_color="tomato", start=540)
+mv = MsaViz(msa, wrap_length=50, color_scheme="Flower", show_count=True, show_seq_char=True, show_consensus=True, consensus_color="tomato", start=540)
 mv.add_text_annotation((709, 720), "Adenylytation motif", text_color="red", range_color="red")
 mv.savefig("Fic_plot.png")
 
