@@ -11,6 +11,11 @@ gdown --folder https://drive.google.com/drive/folders/1Sk4rzPMWpA5nLGr1bwt4JOB2y
 cd clase_alineamientos # El comando "cd" le permite moverse de un directorio (carpeta) a otro. Debe poner la dirección del nuevo directorio.
 ```
 
+# Remover el ambiente de conda instalado previamente
+```yml
+conda remove -n pymsaviz --all -y
+```
+# Instalar nuevamente
 Instalar la herramienta a utilizar, la documentación está disponible [aquí](https://moshi4.github.io/pyMSAviz/getting_started). 
 ```yml
 conda create -n pymsaviz -c conda-forge -c bioconda pymsaviz -y 
