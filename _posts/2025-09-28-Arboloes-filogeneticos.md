@@ -37,4 +37,4 @@ De igual forma, iqtree permite una opción para seleccionar el modelo en automá
 ```yml
 iqtree -s secuencias.trim.fasta -m MFP -bb 1000 -nt AUTO
 ```
-Visualice el árbol en https://itol.embl.de
+Visualice el árbol en [iTOL](https://itol.embl.de) 
