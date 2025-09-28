@@ -31,7 +31,7 @@ trimal -automated1 -terminalonly -in secuencias.aln.fasta -out secuencias.trim.f
 modeltest-ng --help
 modeltest-ng -i secuencias.trim.fasta -d nt -p 8 -T mrbayes -o secuencias.modeltest
 ```
-Note que no hay una opción de modelo par iqtree, pero se podría usar el mejor modelo encontrado en algún otro programa.
+Note que no hay una opción de modelo para iqtree, pero se podría usar el mejor modelo encontrado en algún otro programa.
 # Usar iqtree para generar el árbol
 De igual forma, iqtree permite una opción para seleccionar el modelo en automático
 ```yml
