@@ -1,0 +1,24 @@
+---
+title: "Creación de árboles filogenéticos"
+layout: page
+---
+
+# Configuración preliminar
+
+```yml
+conda config --add channels defaults
+conda config --add channels bioconda
+conda config --add channels conda-forge
+```
+# Descargue los datos e instale el ambiente
+```yml
+gdown --folder https://drive.google.com/drive/folders/1Sk4rzPMWpA5nLGr1bwt4JOB2yKQUKfd0
+conda env create -f env-bayes.yml # Creará un ambiente usando información del archivo descargado.
+conda activate bayes-tree
+```
+
+# Alinear la secuencia con mafft
+```yml
+mafft --auto --thread 8 secuencias2.fasta > secuencias.aln.fasta
+ls -lh
+```
