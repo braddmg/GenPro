@@ -12,7 +12,7 @@ conda config --add channels conda-forge
 ```
 # Descargue los datos e instale el ambiente
 ```yml
-gdown --folder https://drive.google.com/drive/folders/1Sk4rzPMWpA5nLGr1bwt4JOB2yKQUKfd0
+gdown --folder https://drive.google.com/drive/folders/16He3-s3Vc3WQZ6dLmRU12Dm_aTe0Irpg?usp=sharing
 cd clase_arboles
 conda env create -f env-bayes.yml # Creará un ambiente usando información del archivo descargado.
 conda activate bayes-tree
