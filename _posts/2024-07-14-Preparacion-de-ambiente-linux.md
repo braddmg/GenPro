@@ -37,7 +37,7 @@ El siguiente comando actualiza dos paquetes complementarios que pueden dar probl
 pip install -U matplotlib
 conda install --force-reinstall java-jdk
 ```
-#Crear ambientes a utilizar
+# Crear ambientes a utilizar
 ```yml
 #ambiente para ejecutar fastqc
 conda create -c bioconda -c conda-forge fastqc -n fastqc
@@ -49,7 +49,7 @@ conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades fastp 
 conda create -c bioconda -c conda-forge quast -n quast
 conda create -c conda-forge -c bioconda -c defaults prokka -n prokka
 ```
-# Para MAC
+## Para MAC
 
 ```yml
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
