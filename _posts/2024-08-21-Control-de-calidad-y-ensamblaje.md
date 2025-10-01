@@ -3,6 +3,54 @@ title: "Control de calidad y ensamblaje"
 layout: page
 ---
 
+# Crear ambientes a utilizar
+```yml
+#ambiente para ejecutar fastqc
+conda create -c bioconda -c conda-forge fastqc -n fastqc
+#Ambiente para fastp y spades
+conda create -n Genomics
+#Instalar paquetes en el ambiente
+conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades fastp -n Genomics
+# Instalar otros ambientes
+conda create -c bioconda -c conda-forge quast -n quast
+conda create -c conda-forge -c bioconda -c defaults prokka -n prokka
+```
+## Para MAC
+
+```yml
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+conda create -n fastqc
+conda activate fastqc
+brew install fastqc
+conda create -n Genomics
+#Instalar paquetes en el ambiente
+conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 fastp -n Genomics
+conda install y -c conda-forge -c bioconda -c AgBiome python=3.10 spades -n Genomics
+conda deactivate
+conda create -n prokka
+conda activate prokka
+brew install brewsci/bio/prokka
+conda deactivate
+conda create -n quast
+conda activate quast
+brew install quast
+conda deactivate
+```
+## Descargar los datos
+```yml
+#cree una carpeta llamada clas, dónde ejecutaremos todo
+mkdir clase
+#Muévase a la carpeta con el comando cd
+cd clase/
+#Descargue los datos a utilizar
+pip install gdown
+gdown --folder 104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing 
+mv Data 01.Data
+cd 01.Data
+```
+Si tiene MAC debe descargarlos manualmente con el siguiente link de [google drive](https://drive.google.com/drive/folders/104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing
+)
+
 ## Evaluación de la calidad de los reads
 Utilizaremos Fastqc que es un programa que sirve para evaluar la calidad de las secuencias.
 
