@@ -6,14 +6,14 @@ layout: page
 # Crear ambientes a utilizar
 ```yml
 #ambiente para ejecutar fastqc
-conda create -c bioconda -c conda-forge fastqc -n fastqc
+conda create -c bioconda -c conda-forge fastqc -n fastqc -y
 #Ambiente para fastp y spades
 conda create -n Genomics
 #Instalar paquetes en el ambiente
 conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades fastp -n Genomics
 # Instalar otros ambientes
-conda create -c bioconda -c conda-forge quast -n quast
-conda create -c conda-forge -c bioconda -c defaults prokka -n prokka
+conda create -c bioconda -c conda-forge quast -n quast -y
+conda create -c conda-forge -c bioconda -c defaults prokka -n prokka -y
 conda create -n checkm2 -c bioconda -c conda-forge checkm2 -y
 ```
 ## Para MAC
@@ -37,6 +37,11 @@ conda activate quast
 brew install quast
 conda deactivate
 conda create -n checkm2 -c bioconda -c conda-forge checkm2 -y
+```
+## Descargar base de datos
+```yml
+mkdir databases
+conda run -n checkm2 checkm2 database --download --path databases
 ```
 ## Descargar los datos
 ```yml
@@ -93,18 +98,18 @@ Renombre el archivo contigs.fa, puede utilizar el nombre A208b.fasta (pista, uti
 ```yml
 conda deactivate
 conda activate quast
-quast.py A208b.fasta -o ../QUAST/A208b
+quast.py A208b.fasta -o ../05.QUAST/A208b
 ```
 Si han llegado hasta acá, estoy muy orgulloso!
 
-# Anotación con Prokka
+## Anotación con Prokka
 Utilizaremos Prokka para ver los genes anotados
 ```yml
 conda deactivate
 conda activate prokka
 prokka --outdir ../06.Prokka --prefix A208b A208b.fasta
 ```
-#Si tiene MAC
+## Si tiene MAC
 ```yml
 conda create -n prokka
 conda deactivate
@@ -112,7 +117,16 @@ conda activate prokka
 brew install brewsci/bio/prokka
 prokka --outdir ../06.Prokka --prefix A208b A208b.fasta
 ```
-# Phylogenomics made easy
+## Checkm2
+Determinar contaminación y completitud del genoma
+```yml
+conda deactivate
+conda activate checkm2
+mkdir fastas
+mv A208b.fasta fastas/ 
+checkm2 predict --input fastas --output-directory ../07.checkm2 
+```
+# OPCIONAL: Phylogenomics made easy
 Vamos a ejecutar GenFlow, que nos da como output un árbol filogenómico con un sólo comando. Sorry, no lo he estandarizado para MAC :(
 ```yml
 #Descargue el repositorio del github
