@@ -77,20 +77,20 @@ Utiliazremos el parámetro "detect_adapter_per_pe" para detectar si hay residuos
 #Debe crear la carpeta "../03.fastp", inténtelo. 
 conda deactivate
 conda activate Genomics
+mkdir ../03.fastp
 for i in `ls *_1.fastq.gz | sed 's/_1.fastq.gz//'`; do  fastp -i $i\_1.fastq.gz -I $i\_2.fastq.gz --detect_adapter_for_pe -o ../03.fastp/$i\_1.fq.gz -O ../03.fastp/$i\_2.fq.gz -h ../03.fastp/$i\_fastq.html -e 30; done
 ```
 Ubique los nuevos contis con los comandos cd y ls :)
 
 ## Ensamblaje de novo con Spades. 
-Utilizaremos los parámetros "--only-assembler" para que no haga corrección de errores en los reads y los valores de k= 33 y 55 para que sólo haga el ensaamblaje con esos dos valores. Debe ajustar el valor de m según la memoria RAM de la que disponga. Por ejemplo si su computadora tien 16 entonces coloque 14, deje unos 2gb para que no muera. 
+Utilizaremos los parámetros "--only-assembler" para que no haga corrección de errores en los reads y los valores de k= 33 y 55 para que sólo haga el ensaamblaje con esos dos valores. Debe ajustar el valor de m según la memoria RAM de la que disponga. Por ejemplo si su computadora tien 16 entonces coloque 14, deje unos 2gb para que no muera. Si cree que su compu es muy lenta use únicamente -k 55
 
 ```yml
-# muévase a la carpeta dónde están los resultados de fastp.
 #Ejecute el siguiente comando para el ensamblaje.
 spades.py --isolate -m 14 -1 ../03.fastp/A208b_1.fq.gz -2 ../03.fastp/A208b_2.fq.gz -k 33,55 -o ../04.ASSEMBLY_SPAdes/
 ```
 
-El ensamblaje queda guardado en la carpeta ASSEMBLY_SPAdes y es un archivo llamado contigs.fa. Búsquelo con los comandos cd y ls :)
+El ensamblaje queda guardado en la carpeta 04.ASSEMBLY_SPAdes/ y es un archivo llamado contigs.fa. Búsquelo con los comandos cd y ls :)
 Renombre el archivo contigs.fa, puede utilizar el nombre A208b.fasta (pista, utilice el comando mv)
 
 ## Utilizaremos Quast para visualizar las métricas de calidad del ensamblaje
@@ -109,14 +109,7 @@ conda deactivate
 conda activate prokka
 prokka --outdir ../06.Prokka --prefix A208b A208b.fasta
 ```
-## Si tiene MAC
-```yml
-conda create -n prokka
-conda deactivate
-conda activate prokka
-brew install brewsci/bio/prokka
-prokka --outdir ../06.Prokka --prefix A208b A208b.fasta
-```
+
 ## Checkm2
 Determinar contaminación y completitud del genoma
 ```yml
