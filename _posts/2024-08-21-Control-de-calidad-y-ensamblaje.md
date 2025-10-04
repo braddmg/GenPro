@@ -14,6 +14,7 @@ conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades fastp 
 # Instalar otros ambientes
 conda create -c bioconda -c conda-forge quast -n quast
 conda create -c conda-forge -c bioconda -c defaults prokka -n prokka
+conda create -n checkm2 -c bioconda -c conda-forge checkm2 -y
 ```
 ## Para MAC
 
@@ -35,6 +36,7 @@ conda create -n quast
 conda activate quast
 brew install quast
 conda deactivate
+conda create -n checkm2 -c bioconda -c conda-forge checkm2 -y
 ```
 ## Descargar los datos
 ```yml
