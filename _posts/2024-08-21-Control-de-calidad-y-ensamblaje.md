@@ -91,7 +91,7 @@ spades.py --isolate -m 14 -1 ../03.fastp/A208b_1.fq.gz -2 ../03.fastp/A208b_2.fq
 ```
 
 El ensamblaje queda guardado en la carpeta 04.ASSEMBLY_SPAdes/ y es un archivo llamado contigs.fa. Búsquelo con los comandos cd y ls :)
-Renombre el archivo contigs.fa, puede utilizar el nombre A208b.fasta (pista, utilice el comando mv)
+Renombre el archivo contigs.fasta, puede utilizar el nombre A208b.fasta (pista, utilice el comando mv)
 
 ## Utilizaremos Quast para visualizar las métricas de calidad del ensamblaje
 
@@ -117,7 +117,7 @@ conda deactivate
 conda activate checkm2
 mkdir fastas
 mv A208b.fasta fastas/ 
-checkm2 predict --input fastas --output-directory ../07.checkm2 
+checkm2 predict --input fastas --output-directory ../07.checkm2 -x fasta --threads 8 --database_path ~/databases/CheckM2_database/uniref100.KO.1.dmnd --force
 ```
 # OPCIONAL: Phylogenomics made easy
 Vamos a ejecutar GenFlow, que nos da como output un árbol filogenómico con un sólo comando. Sorry, no lo he estandarizado para MAC :(
