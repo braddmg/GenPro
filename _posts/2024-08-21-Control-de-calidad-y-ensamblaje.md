@@ -8,7 +8,7 @@ layout: page
 #ambiente para ejecutar fastqc
 conda create -c bioconda -c conda-forge fastqc -n fastqc -y
 #Ambiente para fastp y spades
-conda create -n Genomics
+conda create -n Genomics -y
 #Instalar paquetes en el ambiente
 conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades fastp -n Genomics
 # Instalar otros ambientes
@@ -39,9 +39,10 @@ conda deactivate
 conda create -n checkm2 -c bioconda -c conda-forge checkm2 -y
 ```
 ## Descargar base de datos
+Este comando puede tardar un rato
 ```yml
-mkdir databases
-conda run -n checkm2 checkm2 database --download --path databases
+mkdir ~/databases
+conda run -n checkm2 checkm2 database --download --path ~/databases
 ```
 ## Descargar los datos
 ```yml
