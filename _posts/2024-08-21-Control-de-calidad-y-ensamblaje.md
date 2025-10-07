@@ -98,6 +98,7 @@ Renombre el archivo contigs.fasta, puede utilizar el nombre A208b.fasta (pista, 
 ```yml
 gdown --folder https://drive.google.com/drive/folders/16He3-s3Vc3WQZ6dLmRU12Dm_aTe0Irpg?usp=sharing
 mv clase_arboles/Genome-208b.fasta ~/04.ASSEMBLY_SPAdes/A208b.fasta
+```
 ## Utilizaremos Quast para visualizar las métricas de calidad del ensamblaje
 
 ```yml
