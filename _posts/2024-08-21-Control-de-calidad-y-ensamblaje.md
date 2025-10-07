@@ -94,11 +94,6 @@ spades.py --isolate -m 14 -1 ../03.fastp/A208b_1.fq.gz -2 ../03.fastp/A208b_2.fq
 El ensamblaje queda guardado en la carpeta 04.ASSEMBLY_SPAdes/ y es un archivo llamado contigs.fa. Búsquelo con los comandos cd y ls :)
 Renombre el archivo contigs.fasta, puede utilizar el nombre A208b.fasta (pista, utilice el comando mv)
 
-## Descargar genoma ya ensamblabo
-```yml
-gdown --folder https://drive.google.com/drive/folders/16He3-s3Vc3WQZ6dLmRU12Dm_aTe0Irpg?usp=sharing
-mv clase_arboles/Genome-208b.fasta ~/04.ASSEMBLY_SPAdes/A208b.fasta
-```
 ## Utilizaremos Quast para visualizar las métricas de calidad del ensamblaje
 
 ```yml
