@@ -11,10 +11,6 @@ gdown --folder https://drive.google.com/drive/folders/1ZBuu60lC3lRs_WdJ62yA8UlJS
 cd clase_alineamientos # El comando "cd" le permite moverse de un directorio (carpeta) a otro. Debe poner la dirección del nuevo directorio.
 ```
 
-# Remover el ambiente de conda instalado previamente
-```yml
-conda remove -n pymsaviz --all -y
-```
 # Instalar nuevamente
 Instalar la herramienta a utilizar, la documentación está disponible [aquí](https://moshi4.github.io/pyMSAviz/getting_started). 
 ```yml
@@ -27,6 +23,8 @@ Los siguientes comando crearan figuras de alineamiento.
 
 ## Visualización con el paquete pymsaviz
 ```yml
+import matplotlib
+matplotlib.use("Agg")
 from pymsaviz import MsaViz # En python hay que especificar qué funciones queremos importar. En esta caso sólo utilizaremos la función MsaViz de la librería pymsaviz
 msa= "aligned.fas" # Generamos un objeto llamado msa, que contiene el archivo fasta con las secuencias alineadas.
 mv = MsaViz(msa, format="fasta") # mv es un nuevo objeto que va a guardar el resultado de la función "MsaViz" que contiene toda la información necesaria para la visualización
