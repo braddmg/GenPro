@@ -1,12 +1,7 @@
-# Tutorial guiado: Unix y Biopython con datos reales
+# Unix y Biopython 
 
-Un tutorial práctico. Vas a descargar un genoma bacteriano real (en FASTA y
-GenBank) y lecturas de secuenciación reales (FASTQ), y luego las vas a explorar
-paso a paso: primero con comandos de Unix, después con Biopython y al final
-combinando ambos.
-
-Cada ejercicio muestra el comando, explica qué hace e incluye el **resultado
-esperado**, para que puedas comparar tu salida.
+Vamos a trabajar con un genoma bacteriano real (en FASTA y
+GenBank) y lecturas de secuenciación reales (FASTQ).
 
 Si buscas una lista rápida de comandos sin explicación, revisa la
 [guía rápida](README.md).
@@ -29,26 +24,25 @@ Si buscas una lista rápida de comandos sin explicación, revisa la
 | `smeliloti.gbk` | El mismo genoma en formato GenBank, con los genes anotados | NCBI RefSeq |
 | `SRR2589044_1.fastq.gz`, `SRR2589044_2.fastq.gz` | Primeras 50,000 lecturas pareadas de Illumina (2 × 150 pb) de *Escherichia coli* B REL606 | ENA / SRA, corrida `SRR2589044` |
 
-*S. meliloti* es una bacteria del suelo que fija nitrógeno en simbiosis con la
-alfalfa. Su genoma tiene tres replicones, lo que lo hace un buen ejemplo para
-trabajar con archivos FASTA.
+*S. meliloti* es una bacteria asociada a suelos que fija nitrógeno en simbiosis con la alfalfa. Su genoma tiene tres replicones, lo que lo hace un buen ejemplo para trabajar con archivos FASTA.
 
 ---
 
 ## 0. Preparación
 
-**Necesitas:** una terminal de Linux o macOS con `curl`, `gzip`, `awk` y `sed`
+**Necesitamos:** una terminal de Linux o macOS con `curl`, `gzip`, `awk` y `sed`
 (vienen instalados), y Python 3 con Biopython para la Parte C:
 
 ```bash
-pip install biopython
-# o: conda install -c conda-forge biopython
+conda create -n biopython -c conda-forge biopython -y
+conda activate biopython
+
 ```
 
 Crea una carpeta de trabajo con tres subcarpetas:
 
 ```bash
-mkdir -p tutorial/{data,results,scripts}
+mkdir -p tutorial/{data,results,scripts} # al usar {} podemos crear múltiples carpetas
 cd tutorial
 ```
 
@@ -116,9 +110,9 @@ ls -lh data/
 
 ---
 
-## Parte A: FASTA con Unix
+## Parte A: Manipulación de archivos fasta
 
-Un archivo FASTA tiene una **línea de encabezado** que empieza con `>`, seguida
+Un archivo FASTA tiene un **header** que empieza con `>`, seguida
 de una o varias líneas de secuencia:
 
 ```text
@@ -173,48 +167,7 @@ NC_003037.1
 NC_003078.1
 ```
 
-### A3. Poner cada secuencia en una sola línea
-
-En el archivo original, cada secuencia está repartida en miles de líneas de 70
-letras. Casi todo es más fácil si cada secuencia queda en **una sola línea**.
-A esto se le llama "linealizar" el FASTA.
-
-```bash
-awk '/^>/ {printf("%s%s\n", (n++ ? "\n" : ""), $0); next}
-     {printf("%s", $0)}
-     END {printf("\n")}' data/smeliloti.fasta > results/smeliloti.linear.fasta
-```
-
-No hace falta entender cada detalle de este comando. La idea es:
-- los encabezados (`/^>/`) se imprimen en su propia línea;
-- las líneas de secuencia se imprimen **sin salto de línea**, así que se pegan
-  unas con otras.
-
-Revisa el resultado:
-
-```bash
-wc -l results/smeliloti.linear.fasta
-cut -c1-60 results/smeliloti.linear.fasta
-```
-
-`cut -c1-60` muestra solo los primeros 60 caracteres de cada línea, para no
-llenar la pantalla con millones de bases.
-
-**Resultado:**
-```text
-6 results/smeliloti.linear.fasta
->NC_003047.1 Sinorhizobium meliloti 1021, complete sequence
-CAGCCAGATGGGGGGAGGGGTGAGCGCTCTCCCGCTCAAAACCTCCAGCACTTTGCGATG
->NC_003037.1 Sinorhizobium meliloti 1021 plasmid pSymA, comp
-GGAACTTGGCGGCGTGCCGACCGTAGCTCCGTTGATGCGACCATCTACGGCAGGTGTGAG
->NC_003078.1 Sinorhizobium meliloti 1021 plasmid pSymB, comp
-ATGGACATTCAGACGCGTGCCTATCTGCCGCGTATCGCCGGGCTGGCTCTCGCGGGCGCA
-```
-
-Ahora el archivo tiene 6 líneas: 3 encabezados y 3 secuencias. En los
-siguientes ejercicios usamos este archivo.
-
-### A4. ¿Qué tan larga es cada secuencia?
+### A3. ¿Qué tan larga es cada secuencia?
 
 ```bash
 awk -v OFS='\t' '/^>/ {id = substr($1, 2); next}
