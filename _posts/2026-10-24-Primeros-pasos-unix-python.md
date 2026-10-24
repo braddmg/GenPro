@@ -1,840 +1,1127 @@
-# Bioinformatics Cheatsheet: Unix & Biopython
+# Tutorial guiado: Unix y Biopython con datos reales
 
-Practical, copy-paste examples for everyday bioinformatics work: inspecting
-sequence files, wrangling tables, batch processing, downloading data from NCBI,
-and scripting with Biopython.
+Un tutorial práctico. Vas a descargar un genoma bacteriano real (en FASTA y
+GenBank) y lecturas de secuenciación reales (FASTQ), y luego las vas a explorar
+paso a paso: primero con comandos de Unix, después con Biopython y al final
+combinando ambos.
 
-All Unix examples assume **GNU tools** (Linux). On macOS, install `coreutils`,
-`gnu-sed` and `gawk` with Homebrew, or adjust flags such as `sed -i`.
+Cada ejercicio muestra el comando, explica qué hace e incluye el **resultado
+esperado**, para que puedas comparar tu salida.
 
-## Contents
+Si buscas una lista rápida de comandos sin explicación, revisa la
+[guía rápida](README.md).
 
-- [Unix](#unix)
-  - [Files and navigation](#files-and-navigation)
-  - [Viewing files](#viewing-files)
-  - [Compressed files](#compressed-files)
-  - [FASTA](#fasta)
-  - [FASTQ](#fastq)
-  - [grep: searching](#grep-searching)
-  - [cut, sort, uniq: tables](#cut-sort-uniq-tables)
-  - [awk: column processing](#awk-column-processing)
-  - [sed: find and replace](#sed-find-and-replace)
-  - [Joining and comparing files](#joining-and-comparing-files)
-  - [Loops and batch processing](#loops-and-batch-processing)
-  - [Downloading data from NCBI](#downloading-data-from-ncbi)
-  - [Common bioinformatics tools](#common-bioinformatics-tools)
-  - [HPC and long-running jobs](#hpc-and-long-running-jobs)
-- [Biopython](#biopython)
-  - [Reading and writing sequences](#reading-and-writing-sequences)
-  - [Working with sequences](#working-with-sequences)
-  - [GenBank files and features](#genbank-files-and-features)
-  - [FASTQ and quality scores](#fastq-and-quality-scores)
-  - [NCBI Entrez](#ncbi-entrez)
-  - [Pairwise alignment](#pairwise-alignment)
-  - [Multiple sequence alignments](#multiple-sequence-alignments)
-  - [Phylogenetic trees](#phylogenetic-trees)
-  - [Parsing BLAST results](#parsing-blast-results)
-- [Regex quick reference](#regex-quick-reference)
+## Contenido
+
+- [0. Preparación](#0-preparación)
+- [1. Descargar los datos](#1-descargar-los-datos)
+- [Parte A: FASTA con Unix](#parte-a-fasta-con-unix)
+- [Parte B: FASTQ con Unix](#parte-b-fastq-con-unix)
+- [Parte C: Biopython](#parte-c-biopython)
+- [Parte D: Unix + Biopython: analizar una tabla de genes](#parte-d-unix--biopython-analizar-una-tabla-de-genes)
+- [Resumen de comandos](#resumen-de-comandos)
+
+### Los datos
+
+| Archivo | Qué es | Fuente |
+|---|---|---|
+| `smeliloti.fasta` | Genoma de *Sinorhizobium meliloti* 1021: un cromosoma y dos megaplásmidos (pSymA y pSymB) | NCBI RefSeq `NC_003047.1`, `NC_003037.1`, `NC_003078.1` |
+| `smeliloti.gbk` | El mismo genoma en formato GenBank, con los genes anotados | NCBI RefSeq |
+| `SRR2589044_1.fastq.gz`, `SRR2589044_2.fastq.gz` | Primeras 50,000 lecturas pareadas de Illumina (2 × 150 pb) de *Escherichia coli* B REL606 | ENA / SRA, corrida `SRR2589044` |
+
+*S. meliloti* es una bacteria del suelo que fija nitrógeno en simbiosis con la
+alfalfa. Su genoma tiene tres replicones, lo que lo hace un buen ejemplo para
+trabajar con archivos FASTA.
 
 ---
 
-# Unix
+## 0. Preparación
 
-## Files and navigation
+**Necesitas:** una terminal de Linux o macOS con `curl`, `gzip`, `awk` y `sed`
+(vienen instalados), y Python 3 con Biopython para la Parte C:
 
 ```bash
-pwd                               # current directory
-ls -lh                            # list with human-readable sizes
-ls -lhS                           # sort by size (largest first)
-ls -lht                           # sort by modification time (newest first)
-du -sh *                          # size of each file/folder here
-du -sh * | sort -h                # ... sorted by size
-df -h .                           # free space on this disk
-
-find . -name "*.fasta"                    # find files by name
-find . -name "*.fastq.gz" -size +1G       # ... larger than 1 GB
-find . -type f -mtime -7                  # modified in the last 7 days
-find . -name "*.tmp" -delete              # find and delete (careful!)
-
-mkdir -p results/{qc,assembly,annotation} # create several folders at once
-cp -r data/ backup/                       # copy a folder
-mv old_name.txt new_name.txt              # rename / move
-ln -s /path/to/big_file.fa .              # symbolic link instead of copying
+pip install biopython
+# o: conda install -c conda-forge biopython
 ```
 
-## Viewing files
+Crea una carpeta de trabajo con tres subcarpetas:
 
 ```bash
-head -n 20 file.tsv               # first 20 lines
-tail -n 20 file.tsv               # last 20 lines
-tail -n +2 file.tsv               # everything except the header
-less -S file.tsv                  # scroll without wrapping long lines (q to quit)
-wc -l file.tsv                    # number of lines
-column -t -s $'\t' file.tsv | less -S          # pretty-print a TSV
-head -1 file.tsv | tr '\t' '\n' | cat -n       # numbered list of column names
+mkdir -p tutorial/{data,results,scripts}
+cd tutorial
 ```
 
-## Compressed files
+- `data/` guarda los archivos descargados. No los modifiques nunca.
+- `results/` guarda todo lo que vas a generar.
+- `scripts/` guarda los scripts de Python.
+
+Todos los comandos se corren desde dentro de la carpeta `tutorial/`.
+
+---
+
+## 1. Descargar los datos
+
+### 1.1 Genoma en FASTA y GenBank
+
+Con `curl` puedes descargar registros directamente de NCBI.
 
 ```bash
-gzip file.fastq                   # compress   -> file.fastq.gz
-gunzip file.fastq.gz              # decompress -> file.fastq
-gzip -k file.fastq                # compress but keep the original
-zcat file.fastq.gz | head         # view without decompressing
-zgrep -c "^>" seqs.fa.gz          # grep inside a .gz
-zless file.fastq.gz
+curl -s -o data/smeliloti.fasta \
+  "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&id=NC_003047.1,NC_003037.1,NC_003078.1&rettype=fasta&retmode=text"
 
-tar -czvf archive.tar.gz folder/  # create a tar.gz
-tar -xzvf archive.tar.gz          # extract a tar.gz
-tar -tzvf archive.tar.gz          # list contents without extracting
-unzip file.zip -d out_folder/
+curl -s -o data/smeliloti.gbk \
+  "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&id=NC_003047.1,NC_003037.1,NC_003078.1&rettype=gbwithparts&retmode=text"
 ```
 
-## FASTA
+- `-s` es modo silencioso (sin barra de progreso) y `-o` es el nombre del
+  archivo de salida.
+- `id=` lleva los tres accesos separados por comas.
+- `rettype=fasta` descarga solo las secuencias. `rettype=gbwithparts`
+  descarga el registro GenBank completo, con secuencia y anotaciones.
+
+### 1.2 Lecturas de secuenciación (FASTQ)
+
+La corrida completa pesa unos 130 MB por archivo. Para que todo sea rápido,
+solo guardamos las primeras **50,000 lecturas**. Cada lectura ocupa 4 líneas,
+así que son 200,000 líneas.
 
 ```bash
-# Count sequences
-grep -c "^>" seqs.fasta
+for r in 1 2; do
+  curl -s "https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR258/004/SRR2589044/SRR2589044_${r}.fastq.gz" \
+    | zcat 2>/dev/null | head -n 200000 | gzip > data/SRR2589044_${r}.fastq.gz
+done
+```
 
-# List sequence IDs (without the ">")
-grep "^>" seqs.fasta | sed 's/^>//'
+- `curl` descarga el archivo y lo pasa directamente por la tubería (`|`).
+- `zcat` lo descomprime.
+- `head -n 200000` se queda solo con las primeras 200,000 líneas.
+- `gzip` las vuelve a comprimir y `>` las guarda.
+- `2>/dev/null` oculta un aviso sin importancia que aparece cuando `head` deja
+  de leer antes de que termine la descarga.
 
-# IDs only (first word of the header)
-grep "^>" seqs.fasta | cut -d' ' -f1 | sed 's/^>//'
+### 1.3 Revisar las descargas
 
-# Length of each sequence (ID <tab> length)
-awk '/^>/ {if (id) print id"\t"len; id=substr($1,2); len=0; next}
-     {len += length($0)}
-     END {print id"\t"len}' seqs.fasta
+```bash
+ls -lh data/
+```
 
-# Total number of bases
-grep -v "^>" seqs.fasta | tr -d '\n' | wc -c
+**Resultado:**
+```text
+-rw-r--r-- 1 user user 6.5M smeliloti.fasta
+-rw-r--r-- 1 user user  17M smeliloti.gbk
+-rw-r--r-- 1 user user 5.9M SRR2589044_1.fastq.gz
+-rw-r--r-- 1 user user 6.0M SRR2589044_2.fastq.gz
+```
 
-# Linearize: put each sequence on a single line (makes many tasks easier)
+---
+
+## Parte A: FASTA con Unix
+
+Un archivo FASTA tiene una **línea de encabezado** que empieza con `>`, seguida
+de una o varias líneas de secuencia:
+
+```text
+>NC_003047.1 Sinorhizobium meliloti 1021, complete sequence
+CAGCCAGATGGGGGGAGGGGTGAGCGCTCTCCCGCTCAAAACCTCCAGCACTTTGCGATG
+ACTTGCCGCTTCCTAATCTAAAAATAAAACTGAATTTATAAGGTTTCTATTTCTTAGAGT
+...
+```
+
+### A1. ¿Cuántas secuencias hay?
+
+Cuenta las líneas que empiezan con `>`.
+
+```bash
+grep -c "^>" data/smeliloti.fasta
+```
+
+- `^` significa "inicio de línea", así que `^>` solo encuentra encabezados.
+- `-c` cuenta las líneas en lugar de mostrarlas.
+
+**Resultado:**
+```text
+3
+```
+
+### A2. ¿Cómo se llaman?
+
+```bash
+grep "^>" data/smeliloti.fasta
+```
+
+**Resultado:**
+```text
+>NC_003047.1 Sinorhizobium meliloti 1021, complete sequence
+>NC_003037.1 Sinorhizobium meliloti 1021 plasmid pSymA, complete sequence
+>NC_003078.1 Sinorhizobium meliloti 1021 plasmid pSymB, complete sequence
+```
+
+Para quedarte solo con los IDs (la primera palabra, sin `>`):
+
+```bash
+grep "^>" data/smeliloti.fasta | cut -d' ' -f1 | tr -d '>'
+```
+
+- `cut -d' ' -f1` separa por espacios y se queda con el campo 1.
+- `tr -d '>'` borra el símbolo `>`.
+
+**Resultado:**
+```text
+NC_003047.1
+NC_003037.1
+NC_003078.1
+```
+
+### A3. Poner cada secuencia en una sola línea
+
+En el archivo original, cada secuencia está repartida en miles de líneas de 70
+letras. Casi todo es más fácil si cada secuencia queda en **una sola línea**.
+A esto se le llama "linealizar" el FASTA.
+
+```bash
 awk '/^>/ {printf("%s%s\n", (n++ ? "\n" : ""), $0); next}
      {printf("%s", $0)}
-     END {printf("\n")}' seqs.fasta > seqs.linear.fasta
-
-# Extract sequences whose ID is in a list (ids.txt: one ID per line)
-awk 'NR==FNR {ids[$1]; next}
-     /^>/ {keep = (substr($1,2) in ids)}
-     keep' ids.txt seqs.fasta > subset.fasta
-
-# Remove sequences shorter than 500 bp (works on a linearized FASTA)
-awk '/^>/ {h=$0; next} length($0) >= 500 {print h"\n"$0}' \
-    seqs.linear.fasta > seqs.min500.fasta
-
-# Split a multi-FASTA into one file per sequence
-awk '/^>/ {if (f) close(f); f = substr($1,2) ".fasta"} {print > f}' seqs.fasta
-
-# Shorten headers to the first word
-sed '/^>/ s/ .*//' seqs.fasta > seqs.short_headers.fasta
-
-# Add a prefix to every header
-sed 's/^>/>sampleA_/' seqs.fasta
-
-# GC content of a whole file
-awk '!/^>/ {seq = seq toupper($0)}
-     END {total = length(seq); gc = gsub(/[GC]/, "", seq);
-          printf("GC = %.2f%%\n", 100 * gc / total)}' seqs.fasta
-
-# Reverse complement of a single sequence
-echo "ATGCGTTA" | rev | tr ACGTacgt TGCAtgca
-
-# Concatenate many FASTA files into one
-cat genomes/*.fna > all_genomes.fna
+     END {printf("\n")}' data/smeliloti.fasta > results/smeliloti.linear.fasta
 ```
 
-## FASTQ
+No hace falta entender cada detalle de este comando. La idea es:
+- los encabezados (`/^>/`) se imprimen en su propia línea;
+- las líneas de secuencia se imprimen **sin salto de línea**, así que se pegan
+  unas con otras.
 
-A FASTQ record is always **4 lines**: header (`@`), sequence, `+`, qualities.
+Revisa el resultado:
 
 ```bash
-# Number of reads
-echo $(( $(zcat reads.fastq.gz | wc -l) / 4 ))
+wc -l results/smeliloti.linear.fasta
+cut -c1-60 results/smeliloti.linear.fasta
+```
 
-# First 5 reads
-zcat reads.fastq.gz | head -n 20
+`cut -c1-60` muestra solo los primeros 60 caracteres de cada línea, para no
+llenar la pantalla con millones de bases.
 
-# FASTQ -> FASTA
-zcat reads.fastq.gz | sed -n '1~4s/^@/>/p; 2~4p' > reads.fasta
+**Resultado:**
+```text
+6 results/smeliloti.linear.fasta
+>NC_003047.1 Sinorhizobium meliloti 1021, complete sequence
+CAGCCAGATGGGGGGAGGGGTGAGCGCTCTCCCGCTCAAAACCTCCAGCACTTTGCGATG
+>NC_003037.1 Sinorhizobium meliloti 1021 plasmid pSymA, comp
+GGAACTTGGCGGCGTGCCGACCGTAGCTCCGTTGATGCGACCATCTACGGCAGGTGTGAG
+>NC_003078.1 Sinorhizobium meliloti 1021 plasmid pSymB, comp
+ATGGACATTCAGACGCGTGCCTATCTGCCGCGTATCGCCGGGCTGGCTCTCGCGGGCGCA
+```
 
-# Read length distribution (length <tab> count)
-zcat reads.fastq.gz | awk 'NR % 4 == 2 {print length($0)}' \
-    | sort -n | uniq -c | awk '{print $2"\t"$1}'
+Ahora el archivo tiene 6 líneas: 3 encabezados y 3 secuencias. En los
+siguientes ejercicios usamos este archivo.
 
-# Mean read length
-zcat reads.fastq.gz | awk 'NR % 4 == 2 {s += length($0); n++} END {print s/n}'
+### A4. ¿Qué tan larga es cada secuencia?
 
-# Subsample the first 100,000 reads
-zcat reads.fastq.gz | head -n 400000 | gzip > sub.fastq.gz
+```bash
+awk -v OFS='\t' '/^>/ {id = substr($1, 2); next}
+                 {print id, length($0)}' results/smeliloti.linear.fasta > results/lengths.tsv
 
-# Check that R1 and R2 have the same number of reads
-for f in *_R1*.fastq.gz; do
-    r2=${f/_R1/_R2}
-    echo -e "$f\t$(( $(zcat "$f" | wc -l) / 4 ))\t$(( $(zcat "$r2" | wc -l) / 4 ))"
+cat results/lengths.tsv
+```
+
+`awk` lee el archivo línea por línea:
+- Si la línea es un encabezado (`/^>/`), guarda el ID en `id`.
+  `substr($1, 2)` toma la primera palabra desde la letra 2, o sea, sin el `>`.
+  `next` pasa a la siguiente línea.
+- Si es una secuencia, imprime el ID y la longitud de la línea (`length($0)`).
+- `-v OFS='\t'` hace que las columnas de salida se separen con tabulador.
+
+**Resultado:**
+```text
+NC_003047.1	3654135
+NC_003037.1	1354226
+NC_003078.1	1683333
+```
+
+El cromosoma mide unas 3.65 Mb, pSymA 1.35 Mb y pSymB 1.68 Mb.
+
+### A5. Tamaño total del genoma
+
+Quita los encabezados y los saltos de línea, y cuenta los caracteres.
+
+```bash
+grep -v "^>" data/smeliloti.fasta | tr -d '\n' | wc -c
+```
+
+- `grep -v` se queda con las líneas que **no** coinciden, o sea, quita los
+  encabezados.
+- `tr -d '\n'` borra todos los saltos de línea.
+- `wc -c` cuenta los caracteres.
+
+**Resultado:**
+```text
+6691694
+```
+
+### A6. Contenido de GC de cada secuencia
+
+```bash
+awk -v OFS='\t' '/^>/ {id = substr($1, 2); next}
+                 {total = length($0); gc = gsub(/[GC]/, ""); print id, 100 * gc / total}' \
+    results/smeliloti.linear.fasta > results/gc.tsv
+
+cat results/gc.tsv
+```
+
+- `total` guarda la longitud de la secuencia.
+- `gsub(/[GC]/, "")` borra todas las G y C, y **devuelve cuántas borró**. Ese
+  número es la cantidad de GC.
+- `100 * gc / total` es el porcentaje.
+
+**Resultado:**
+```text
+NC_003047.1	62.7289
+NC_003037.1	60.3687
+NC_003078.1	62.4219
+```
+
+pSymA tiene un GC claramente menor que el cromosoma.
+
+### A7. Extraer una secuencia por su ID
+
+Como el archivo está linealizado, cada secuencia es exactamente la línea
+siguiente a su encabezado. `grep -A 1` muestra la línea encontrada **y la
+siguiente**:
+
+```bash
+grep -A 1 "^>NC_003037.1" results/smeliloti.linear.fasta > results/pSymA.fasta
+
+grep -c "^>" results/pSymA.fasta
+cut -c1-70 results/pSymA.fasta
+```
+
+**Resultado:**
+```text
+1
+>NC_003037.1 Sinorhizobium meliloti 1021 plasmid pSymA, complete seque
+GGAACTTGGCGGCGTGCCGACCGTAGCTCCGTTGATGCGACCATCTACGGCAGGTGTGAGATGCCGGTAT
+```
+
+Para extraer **varias** secuencias, pon los IDs en un archivo, uno por línea:
+
+```bash
+printf "NC_003037.1\nNC_003078.1\n" > results/ids.txt
+
+grep -A 1 -F -f results/ids.txt results/smeliloti.linear.fasta | grep -v "^--$" > results/plasmids.fasta
+
+grep "^>" results/plasmids.fasta
+```
+
+- `-f results/ids.txt` busca todos los textos que estén en ese archivo.
+- `-F` trata los IDs como texto literal, no como expresiones regulares. Así el
+  punto de `NC_003037.1` no se interpreta como "cualquier carácter".
+- `grep -A` pone una línea `--` entre grupos de resultados.
+  `grep -v "^--$"` la elimina.
+
+**Resultado:**
+```text
+>NC_003037.1 Sinorhizobium meliloti 1021 plasmid pSymA, complete sequence
+>NC_003078.1 Sinorhizobium meliloti 1021 plasmid pSymB, complete sequence
+```
+
+### A8. Separar el FASTA en un archivo por secuencia
+
+Aquí usamos un **loop**: repetimos el mismo comando para cada ID.
+
+```bash
+mkdir -p results/split
+
+for id in $(grep "^>" results/smeliloti.linear.fasta | cut -d' ' -f1 | tr -d '>'); do
+    grep -A 1 "^>$id" results/smeliloti.linear.fasta > results/split/$id.fasta
+done
+
+ls results/split
+```
+
+- `$( ... )` ejecuta el comando de A2 y devuelve la lista de IDs.
+- `for id in ...; do ...; done` repite el bloque una vez por cada ID, guardando
+  el ID actual en `$id`.
+- Dentro del loop, el comando de A7 extrae esa secuencia a su propio archivo.
+
+**Resultado:**
+```text
+NC_003037.1.fasta
+NC_003047.1.fasta
+NC_003078.1.fasta
+```
+
+### A9. Recorrer archivos con un loop
+
+Ahora el loop recorre **archivos**. Para cada uno, imprime su nombre y su
+número de bases.
+
+```bash
+for f in results/split/*.fasta; do
+    name=$(basename "$f" .fasta)
+    bases=$(grep -v "^>" "$f" | tr -d '\n' | wc -c)
+    echo -e "$name\t$bases"
 done
 ```
 
-## grep: searching
+- `results/split/*.fasta` significa "todos los archivos que terminan en
+  `.fasta` en esa carpeta".
+- `basename "$f" .fasta` quita la carpeta y la extensión:
+  `results/split/NC_003037.1.fasta` queda como `NC_003037.1`.
+- `bases=$( ... )` guarda en una variable el resultado del comando de A5.
+- `echo -e` hace que `\t` se imprima como tabulador.
 
-```bash
-grep "pattern" file               # lines containing pattern
-grep -i "pattern" file            # case-insensitive
-grep -v "pattern" file            # lines NOT containing pattern
-grep -c "pattern" file            # count matching lines
-grep -n "pattern" file            # show line numbers
-grep -w "gene1" file              # whole word only (won't match gene10)
-grep -F "a.b*c" file              # literal string, no regex
-grep -f ids.txt file              # any pattern listed in ids.txt
-grep -wFf ids.txt file            # ... exact words, fast (good for ID lists)
-grep -r "pattern" folder/         # search recursively in all files
-grep -l "pattern" *.tsv           # only print file names that match
-grep -A 2 -B 1 "pattern" file     # 2 lines after and 1 line before each match
-
-# Extract only the matching text (-o) with an extended regex (-E)
-grep -oE 'SAM(N|EA|D)[0-9]+' table.tsv            # BioSample accessions
-grep -oE 'GC[AF]_[0-9]{9}\.[0-9]+' table.tsv     # Assembly accessions
-grep -oE '[SE]RR[0-9]+' table.tsv                 # SRA run accessions
-
-# Extract and deduplicate, keeping the original order
-grep -oE 'SAM(N|EA|D)[0-9]+' table.tsv | awk '!seen[$0]++' > biosamples.txt
+**Resultado:**
+```text
+NC_003037.1	1354226
+NC_003047.1	3654135
+NC_003078.1	1683333
 ```
 
-## cut, sort, uniq: tables
+### A10. Simplificar los encabezados
+
+Muchos programas fallan con encabezados largos que tienen espacios. Para dejar
+solo la primera palabra:
 
 ```bash
-cut -f 2 file.tsv                 # column 2 (tab-separated by default)
-cut -f 1,3,5 file.tsv             # several columns
-cut -f 3- file.tsv                # column 3 to the end
-cut -d ',' -f 2 file.csv          # comma-separated
-
-sort file.txt                     # alphabetical
-sort -n file.txt                  # numeric
-sort -k2,2nr file.tsv             # by column 2, numeric, descending
-sort -t $'\t' -k3,3 -k1,1 file    # by column 3, then column 1
-sort -u file.txt                  # sort and remove duplicates
-sort -V files.txt                 # natural order (chr2 before chr10)
-
-uniq -c                           # count consecutive duplicates (sort first!)
-sort file.txt | uniq -c | sort -nr          # frequency table, most common first
-sort file.txt | uniq -d                     # only values that are duplicated
-
-# Frequency of values in column 4, without the header
-tail -n +2 file.tsv | cut -f 4 | sort | uniq -c | sort -nr
-
-paste file1.txt file2.txt         # put files side by side (column-wise)
-paste -sd, ids.txt                # join all lines into one: id1,id2,id3
-tr '\t' ','  < file.tsv > file.csv          # TSV -> CSV (only if no commas in fields)
-tr -d '\r' < windows.txt > unix.txt         # remove Windows line endings
+sed '/^>/ s/ .*//' data/smeliloti.fasta > results/smeliloti.short.fasta
+grep "^>" results/smeliloti.short.fasta
 ```
 
-## awk: column processing
+- `/^>/` aplica el cambio solo a las líneas de encabezado.
+- `s/ .*//` reemplaza todo lo que va desde el primer espacio hasta el final de
+  la línea por nada.
 
-`awk` reads a file line by line, splits each line into columns (`$1`, `$2`, …;
-`$0` is the whole line, `NF` the number of columns, `NR` the line number) and
-applies `condition { action }` rules.
-
-```bash
-awk -F'\t' '{print $2}' file.tsv                 # column 2
-awk -F'\t' '{print $NF}' file.tsv                # last column
-awk -F'\t' '{print $(NF-1)}' file.tsv            # second-to-last column
-awk -F'\t' 'NR > 1' file.tsv                     # skip header
-awk -F'\t' -v OFS='\t' '{print $3, $1}' file.tsv # reorder columns, keep tabs
-
-# Filter rows
-awk -F'\t' '$5 > 1000' file.tsv                  # numeric condition
-awk -F'\t' '$3 == "chromosome"' file.tsv         # exact match
-awk -F'\t' '$4 ~ /Escherichia/' file.tsv         # regex match in a column
-awk -F'\t' 'NR == 1 || $7 < 1e-5' blast.tsv      # keep header + filtered rows
-awk -F'\t' '$NF != ""' file.tsv                  # last column not empty
-
-# Sum, mean, min, max of a column
-awk -F'\t' '{s += $2} END {print s}' file.tsv
-awk -F'\t' '{s += $2; n++} END {print s/n}' file.tsv
-awk -F'\t' 'NR == 1 {min = max = $2}
-            {if ($2 < min) min = $2; if ($2 > max) max = $2}
-            END {print min, max}' file.tsv
-
-# Remove duplicate lines, keeping order (first occurrence)
-awk '!seen[$0]++' file.txt
-# ... duplicates based on one column only
-awk -F'\t' '!seen[$1]++' file.tsv
-
-# Count / sum per group (group by column 1)
-awk -F'\t' '{count[$1]++} END {for (k in count) print k"\t"count[k]}' file.tsv
-awk -F'\t' '{sum[$1] += $3} END {for (k in sum) print k"\t"sum[k]}' file.tsv
-
-# Select a column by its header name
-awk -F'\t' -v col="geo_loc_name" '
-    NR == 1 {for (i = 1; i <= NF; i++) if ($i == col) c = i; next}
-    {print $c}' file.tsv
-
-# Add a column
-awk -F'\t' -v OFS='\t' '{print $0, "sampleA"}' file.tsv
-awk -F'\t' -v OFS='\t' 'NR == 1 {print $0, "len_kb"; next}
-                        {print $0, $3/1000}' file.tsv
-
-# Convert a GFF to BED (0-based start) for CDS features
-awk -F'\t' -v OFS='\t' '!/^#/ && $3 == "CDS" {print $1, $4-1, $5, $9, ".", $7}' \
-    annotation.gff > cds.bed
+**Resultado:**
+```text
+>NC_003047.1
+>NC_003037.1
+>NC_003078.1
 ```
 
-## sed: find and replace
+### A11. Buscar un motivo
+
+¿Cuántas veces aparece el sitio de restricción de EcoRI (`GAATTC`) en cada
+secuencia?
 
 ```bash
-sed 's/old/new/' file             # replace first match on each line
-sed 's/old/new/g' file            # replace all matches
-sed -i 's/old/new/g' file         # edit the file in place (careful!)
-sed -i.bak 's/old/new/g' file     # in place, keeping a backup file.bak
-sed -n '10,20p' file              # print lines 10 to 20
-sed '1d' file                     # delete the first line (header)
-sed '/^#/d' file                  # delete comment lines
-sed '/^$/d' file                  # delete empty lines
-sed 's/\t/,/g' file.tsv           # tabs -> commas
-sed 's/^[ \t]*//; s/[ \t]*$//'    # trim leading/trailing whitespace
-sed 's/.*\(GC[AF]_[0-9.]*\).*/\1/' file   # keep only the captured group
-sed -E 's/(GC[AF]_[0-9]+\.[0-9]+)_.*/\1/' # same idea with extended regex
-```
-
-## Joining and comparing files
-
-```bash
-# Add info from table2 to table1 using a shared ID in column 1
-# (like a SQL LEFT JOIN; missing IDs get "NA")
-awk -F'\t' -v OFS='\t' 'NR==FNR {info[$1] = $2; next}
-                        {print $0, ($1 in info ? info[$1] : "NA")}' \
-    table2.tsv table1.tsv > joined.tsv
-
-# Same with join (both files must be sorted on the key)
-join -t $'\t' <(sort -k1,1 a.tsv) <(sort -k1,1 b.tsv) > joined.tsv
-
-# Set operations on two lists (comm needs sorted input)
-comm -12 <(sort a.txt) <(sort b.txt)     # in both
-comm -23 <(sort a.txt) <(sort b.txt)     # only in a
-comm -13 <(sort a.txt) <(sort b.txt)     # only in b
-
-diff file1.txt file2.txt                 # line-by-line differences
-md5sum *.fastq.gz > checksums.md5        # checksums
-md5sum -c checksums.md5                  # verify downloads
-```
-
-## Loops and batch processing
-
-```bash
-# Loop over files, deriving a sample name from each
-for f in reads/*_R1.fastq.gz; do
-    sample=$(basename "$f" _R1.fastq.gz)
-    echo "Processing $sample"
-    fastp -i "$f" -I "reads/${sample}_R2.fastq.gz" \
-          -o "trimmed/${sample}_R1.fastq.gz" -O "trimmed/${sample}_R2.fastq.gz"
+for f in results/split/*.fasta; do
+    name=$(basename "$f" .fasta)
+    n=$(grep -v "^>" "$f" | grep -o "GAATTC" | wc -l)
+    echo -e "$name\t$n"
 done
-
-# Loop over the lines of a file
-while read -r acc; do
-    echo "Downloading $acc"
-done < accessions.txt
-
-# Loop over a two-column TSV (sample <tab> path)
-while IFS=$'\t' read -r sample path; do
-    echo "$sample -> $path"
-done < samples.tsv
-
-# Run in parallel: 8 jobs at a time
-ls *.fasta | xargs -P 8 -I {} prodigal -i {} -a {}.faa -q
-parallel -j 8 'gzip {}' ::: *.fastq                       # GNU parallel
-
-# Useful string manipulations inside loops
-f="sample1_R1.fastq.gz"
-echo "${f%.fastq.gz}"       # remove suffix   -> sample1_R1
-echo "${f%%_*}"             # up to first _   -> sample1
-echo "${f/_R1/_R2}"         # replace         -> sample1_R2.fastq.gz
-echo "$(basename /a/b/c.fa .fa)"   # strip path and extension -> c
-
-# Stop a script at the first error, and on unset variables
-set -euo pipefail
 ```
 
-## Downloading data from NCBI
+- `grep -o` imprime **cada coincidencia** en su propia línea, así que `wc -l`
+  cuenta coincidencias y no líneas.
+- Usamos los archivos linealizados. En el FASTA original, un sitio que quede
+  partido entre dos líneas no se encontraría.
 
-```bash
-# Direct download
-wget https://example.org/file.fa.gz
-curl -L -O https://example.org/file.fa.gz
-wget -i urls.txt                          # download every URL in a file
+`GAATTC` es igual a su propio complemento reverso, así que estos conteos ya
+incluyen las dos hebras.
 
-# NCBI Datasets CLI: genomes by accession
-datasets download genome accession GCF_000005845.2 \
-    --include genome,protein,gff3 --filename ecoli.zip
-datasets download genome accession --inputfile assemblies.txt \
-    --include genome --filename genomes.zip
-# Genome metadata as a table
-datasets summary genome taxon "Campylobacter jejuni" \
-    --assembly-level complete --as-json-lines \
-  | dataformat tsv genome \
-    --fields accession,organism-name,assmstats-total-sequence-len,assminfo-biosample-accession
-
-# Entrez Direct (EDirect)
-efetch -db nucleotide -id NC_000913.3 -format fasta > ecoli.fasta
-efetch -db nucleotide -id NC_000913.3 -format gb > ecoli.gbk
-esearch -db assembly -query "Campylobacter jejuni[Organism] AND complete genome[filter]" \
-  | esummary | xtract -pattern DocumentSummary -element AssemblyAccession BioSampleAccn
-
-# SRA reads (sra-tools)
-prefetch SRR1234567
-fasterq-dump --split-files --threads 8 SRR1234567
+**Resultado:**
+```text
+NC_003037.1	422
+NC_003047.1	1225
+NC_003078.1	605
 ```
 
-## Common bioinformatics tools
+### A12. Juntar dos tablas
+
+Las tablas de A4 (longitud) y A6 (GC) tienen las secuencias en el mismo orden,
+así que `paste` las puede poner lado a lado:
 
 ```bash
-# samtools
-samtools faidx genome.fa                       # index a FASTA
-samtools faidx genome.fa chr1:1000-2000        # extract a region
-cut -f1,2 genome.fa.fai                        # sequence names and lengths
-samtools view -c aln.bam                       # count alignments
-samtools view -c -F 4 aln.bam                  # count mapped reads
-samtools flagstat aln.bam                      # mapping summary
-samtools sort -@ 8 -o aln.sorted.bam aln.bam
-samtools index aln.sorted.bam
-samtools depth -a aln.sorted.bam | awk '{s += $3} END {print s/NR}'  # mean depth
-
-# seqkit (fast FASTA/FASTQ swiss-army knife)
-seqkit stats *.fasta                           # counts, lengths, N50 (-a)
-seqkit seq -m 500 seqs.fasta                   # keep sequences >= 500 bp
-seqkit grep -f ids.txt seqs.fasta              # extract by ID list
-seqkit fx2tab -n -l -g seqs.fasta              # name, length, GC per sequence
-seqkit rmdup -s seqs.fasta                     # remove duplicate sequences
-
-# bedtools
-bedtools intersect -a genes.bed -b peaks.bed -u      # genes overlapping peaks
-bedtools getfasta -fi genome.fa -bed regions.bed -fo regions.fa
+paste results/lengths.tsv results/gc.tsv
 ```
 
-## HPC and long-running jobs
-
-```bash
-nohup ./long_job.sh > job.log 2>&1 &       # keep running after logout
-tmux new -s analysis                       # persistent session (Ctrl-b d to detach)
-tmux attach -t analysis
-htop                                       # monitor CPU/memory
-nproc                                      # number of CPU cores
-free -h                                    # memory available
-
-# SLURM
-sbatch job.sh                              # submit
-squeue -u $USER                            # my jobs
-scancel <jobid>                            # cancel
-sacct -j <jobid> --format=JobID,State,Elapsed,MaxRSS   # usage after finishing
+**Resultado:**
+```text
+NC_003047.1	3654135	NC_003047.1	62.7289
+NC_003037.1	1354226	NC_003037.1	60.3687
+NC_003078.1	1683333	NC_003078.1	62.4219
 ```
 
-Minimal SLURM script:
+El ID aparece dos veces. Con `cut` nos quedamos con las columnas 1, 2 y 4, y
+con `sort` ordenamos de la secuencia más larga a la más corta:
 
 ```bash
-#!/bin/bash
-#SBATCH --job-name=assembly
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=32G
-#SBATCH --time=24:00:00
-#SBATCH --output=logs/%x_%j.out
+paste results/lengths.tsv results/gc.tsv | cut -f 1,2,4 | sort -k2,2nr > results/summary.tsv
+cat results/summary.tsv
+```
 
-set -euo pipefail
-spades.py -1 R1.fastq.gz -2 R2.fastq.gz -o spades_out -t "$SLURM_CPUS_PER_TASK"
+`sort -k2,2nr` ordena por la columna 2, como número (`n`) y de mayor a menor
+(`r`).
+
+**Resultado:**
+```text
+NC_003047.1	3654135	62.7289
+NC_003078.1	1683333	62.4219
+NC_003037.1	1354226	60.3687
+```
+
+### A13. Complemento reverso de una secuencia corta
+
+```bash
+echo "ATGAAACGCATTAGCACCACC" | rev | tr ACGT TGCA
+```
+
+- `rev` invierte el texto.
+- `tr ACGT TGCA` cambia cada base por su complemento: A↔T y C↔G.
+
+**Resultado:**
+```text
+GGTGGTGCTAATGCGTTTCAT
 ```
 
 ---
 
-# Biopython
+## Parte B: FASTQ con Unix
 
-Install with `pip install biopython` or `conda install -c conda-forge biopython`.
-Examples target Biopython ≥ 1.80.
+En un archivo FASTQ, cada lectura ocupa **exactamente 4 líneas**:
 
-## Reading and writing sequences
+| Línea | Contenido |
+|---|---|
+| 1 | Encabezado, empieza con `@` |
+| 2 | Secuencia |
+| 3 | `+` |
+| 4 | Calidades, un carácter por base |
 
-```python
-from Bio import SeqIO
+Nuestros archivos están comprimidos (`.gz`). `zcat` los descomprime en
+pantalla sin modificar el archivo.
 
-# Iterate over a FASTA file
-for record in SeqIO.parse("seqs.fasta", "fasta"):
-    print(record.id, len(record.seq), record.description)
+### B1. Ver la primera lectura
 
-# Read a file that contains exactly one sequence
-record = SeqIO.read("single.fasta", "fasta")
-
-# Load everything into a dictionary {id: record} (small files)
-records = SeqIO.to_dict(SeqIO.parse("seqs.fasta", "fasta"))
-print(records["seq1"].seq)
-
-# Index a large file without loading it into memory
-index = SeqIO.index("big.fasta", "fasta")
-print(index["seq42"].seq)
-
-# Filter by length and write the result
-long_seqs = (r for r in SeqIO.parse("seqs.fasta", "fasta") if len(r) >= 500)
-count = SeqIO.write(long_seqs, "seqs.min500.fasta", "fasta")
-print(f"{count} sequences written")
-
-# Extract sequences whose ID is in a list
-with open("ids.txt") as fh:
-    wanted = {line.strip() for line in fh if line.strip()}
-subset = (r for r in SeqIO.parse("seqs.fasta", "fasta") if r.id in wanted)
-SeqIO.write(subset, "subset.fasta", "fasta")
-
-# Convert between formats
-SeqIO.convert("genome.gbk", "genbank", "genome.fasta", "fasta")
-SeqIO.convert("reads.fastq", "fastq", "reads.fasta", "fasta")
-
-# Read gzip-compressed files
-import gzip
-with gzip.open("seqs.fasta.gz", "rt") as fh:
-    for record in SeqIO.parse(fh, "fasta"):
-        print(record.id)
-
-# Length table (ID <tab> length)
-with open("lengths.tsv", "w") as out:
-    for r in SeqIO.parse("seqs.fasta", "fasta"):
-        out.write(f"{r.id}\t{len(r)}\n")
-
-# Rename sequences
-def renamed(records, prefix):
-    for i, r in enumerate(records, 1):
-        r.id = f"{prefix}_{i}"
-        r.description = ""
-        yield r
-
-SeqIO.write(renamed(SeqIO.parse("seqs.fasta", "fasta"), "contig"),
-            "renamed.fasta", "fasta")
+```bash
+zcat data/SRR2589044_1.fastq.gz | head -n 4
 ```
 
-## Working with sequences
+**Resultado:**
+```text
+@SRR2589044.1 HWI-ST957:244:H73TDADXX:1:1101:10469:2228/1
+GTGGAAACCAGCGACGGTGACGGCTATATCAACTGCGTGATTGAACATCAAAGCTCTGCAGAAAAGAATATGGCTTTTCGGCTAATGCGCTATGCCACTGCCGCCATGCAGCGTCACCTGGATAACTGTCTCTTATACACATCTCCGAGC
++
+BBBFFFFFHHHHHJJJJIIGIIJJJJJGIJJIJJJIJIJGHIIJIIFFFGHHFFFFFEEEEEEDDDDDDDEEDCDDDDDD@BDDDDDDDDBDDDDDDDDDCABDDDDCDDCCDBDDDDDDDBDEDDDCCDCDCDDDDCDDDCDDDD@DDD
+```
 
+El `/1` al final del encabezado indica que es la lectura 1 del par. La misma
+lectura en el archivo `_2` termina en `/2`.
+
+### B2. Contar lecturas
+
+Cuenta las líneas y divide entre 4.
+
+```bash
+echo $(( $(zcat data/SRR2589044_1.fastq.gz | wc -l) / 4 ))
+```
+
+- `$( ... )` ejecuta el comando y pone su resultado en ese lugar.
+- `$(( ... ))` hace operaciones con números enteros.
+
+**Resultado:**
+```text
+50000
+```
+
+### B3. Contar lecturas en todos los archivos
+
+Los archivos de un par (R1 y R2) deben tener el mismo número de lecturas. Con
+un loop revisas todos a la vez:
+
+```bash
+for f in data/*.fastq.gz; do
+    n=$(( $(zcat "$f" | wc -l) / 4 ))
+    echo -e "$f\t$n"
+done
+```
+
+**Resultado:**
+```text
+data/SRR2589044_1.fastq.gz	50000
+data/SRR2589044_2.fastq.gz	50000
+```
+
+### B4. Quedarse solo con las secuencias
+
+Las secuencias están en las líneas 2, 6, 10, 14… `sed -n '2~4p'` imprime la
+línea 2 y después una de cada 4:
+
+```bash
+zcat data/SRR2589044_1.fastq.gz | sed -n '2~4p' | head -n 2
+```
+
+- `sed -n` no imprime nada a menos que se lo pidas.
+- `2~4` significa "empezando en la línea 2, cada 4 líneas".
+- `p` imprime esas líneas.
+
+**Resultado** (recortado a 60 caracteres):
+```text
+GTGGAAACCAGCGACGGTGACGGCTATATCAACTGCGTGATTGAACATCAAAGCTCTGCA
+GCAATATTACCGGGCGACATCGCCGAAGATGACATCACAGCGGTACTCTGTTTTGTGATT
+```
+
+Este truco es la base de los siguientes ejercicios.
+
+### B5. Longitud de las lecturas
+
+```bash
+# Cuántas lecturas hay de cada longitud
+zcat data/SRR2589044_1.fastq.gz | sed -n '2~4p' | awk '{print length($0)}' | sort -n | uniq -c
+
+# Resumen
+zcat data/SRR2589044_1.fastq.gz | sed -n '2~4p' \
+    | awk '{bases += length($0)} END {print "reads:", NR, "bases:", bases, "mean:", bases/NR}'
+```
+
+- `awk '{print length($0)}'` imprime la longitud de cada secuencia.
+- `sort -n | uniq -c` cuenta cuántas veces aparece cada longitud.
+- En el resumen, `bases` va sumando las longitudes. Al final (`END`), `NR` es el
+  número de líneas leídas, o sea, el número de lecturas.
+
+**Resultado:**
+```text
+  50000 150
+reads: 50000 bases: 7500000 mean: 150
+```
+
+Todas las lecturas miden 150 pb porque todavía no se han recortado. Después de
+quitar adaptadores, las longitudes varían mucho más.
+
+### B6. Contenido de GC de las lecturas
+
+```bash
+zcat data/SRR2589044_1.fastq.gz | sed -n '2~4p' \
+    | awk '{total += length($0); gc += gsub(/[GC]/, "")} END {print 100 * gc / total}'
+```
+
+Es la misma idea que en A6, pero sumando todas las lecturas.
+
+**Resultado:**
+```text
+50.4053
+```
+
+Coincide con el GC del genoma de *E. coli* (alrededor de 50.8%).
+
+### B7. Buscar contaminación con adaptadores
+
+Las librerías Nextera usan la secuencia `CTGTCTCTTATACACATCT`. Si el fragmento
+de ADN es más corto que la lectura, el secuenciador termina leyendo el
+adaptador. Puedes verlo cerca del final de la lectura de B1.
+
+```bash
+zcat data/SRR2589044_1.fastq.gz | sed -n '2~4p' | grep -c "CTGTCTCTTATACACATCT"
+```
+
+**Resultado:**
+```text
+6771
+```
+
+Alrededor del 13.5% de las lecturas (6,771 de 50,000) tienen el adaptador.
+Hay que recortarlas (por ejemplo con `fastp` o `cutadapt`) antes de ensamblar
+o mapear.
+
+### B8. Lecturas con bases N y lecturas repetidas
+
+```bash
+# Lecturas que tienen al menos una N
+zcat data/SRR2589044_1.fastq.gz | sed -n '2~4p' | grep -c "N"
+
+# Las secuencias más repetidas
+zcat data/SRR2589044_1.fastq.gz | sed -n '2~4p' | sort | uniq -c | sort -nr | head -n 3
+```
+
+`sort | uniq -c | sort -nr` es una combinación muy útil: cuenta cuántas veces
+aparece cada línea y ordena de la más frecuente a la menos frecuente.
+
+**Resultado** (secuencias recortadas):
+```text
+34
+      4 CTTCCATACCGATCAGACCATTGTCAACCAGTACGGTGTTGCCAACAGACAGGTCAGTAGTG
+      3 GTTCATCACTGGTCTTTCCGAAAGGCTGTAAGAAATAACTTCGTTGTTGAAGAGATCTATTA
+      3 GTCACACATTGGTCGTAGCCCGTCACTGTTTGTTAATGCCGCCACCTGGGGGCTGCTGTTTA
+```
+
+Muy pocas lecturas tienen N, y ninguna secuencia aparece más de 4 veces, así
+que esta librería tiene poca duplicación.
+
+### B9. Convertir FASTQ a FASTA
+
+```bash
+zcat data/SRR2589044_1.fastq.gz | sed -n '1~4s/^@/>/p; 2~4p' > results/SRR2589044_1.fasta
+
+head -n 4 results/SRR2589044_1.fasta
+grep -c "^>" results/SRR2589044_1.fasta
+```
+
+- `1~4s/^@/>/p`: en las líneas 1, 5, 9… (los encabezados), cambia `@` por `>`
+  y las imprime.
+- `2~4p`: imprime las líneas 2, 6, 10… (las secuencias).
+- Las líneas `+` y las calidades no se imprimen.
+
+**Resultado:**
+```text
+>SRR2589044.1 HWI-ST957:244:H73TDADXX:1:1101:10469:2228/1
+GTGGAAACCAGCGACGGTGACGGCTATATCAACTGCGTGATTGAACATCAAAGCTCTGCAGAAAAGAATATGGCTTTTCGGCTAATGCGCTATGCCACTGCCGCCATGCAGCGTCACCTGGATAACTGTCTCTTATACACATCTCCGAGC
+>SRR2589044.2 HWI-ST957:244:H73TDADXX:1:1101:10877:2125/1
+GCAATATTACCGGGCGACATCGCCGAAGATGACATCACAGCGGTACTCTGTTTTGTGATTGAAGCCGATCAGATTACCTTTGAAACAGTAGAAGTCTCGCCAAAAATATCCACCCCACCAGTGCTTAAACTGGCAGCCGAACAAGCGCCA
+50000
+```
+
+### B10. Crear un archivo de prueba pequeño
+
+Probar un análisis con un archivo pequeño antes de usar el completo ahorra
+mucho tiempo. 1,000 lecturas son 4,000 líneas:
+
+```bash
+zcat data/SRR2589044_1.fastq.gz | head -n 4000 | gzip > results/test_1000reads.fastq.gz
+echo $(( $(zcat results/test_1000reads.fastq.gz | wc -l) / 4 ))
+```
+
+**Resultado:**
+```text
+1000
+```
+
+---
+
+## Parte C: Biopython
+
+Guarda cada script en la carpeta `scripts/` y córrelo desde la carpeta
+`tutorial/`:
+
+```bash
+python3 scripts/c1_resumen_fasta.py
+```
+
+### C1. Leer un FASTA: ID, longitud y GC
+
+`scripts/c1_resumen_fasta.py`
 ```python
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
+from Bio import SeqIO
 from Bio.SeqUtils import gc_fraction
 
-dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
-
-dna.complement()
-dna.reverse_complement()
-dna.transcribe()                       # DNA -> RNA
-dna.translate()                        # standard code, '*' for stops
-dna.translate(table=11, to_stop=True)  # bacterial code, stop at first stop
-dna[0:9]                               # slicing works like strings
-dna.count("G")
-gc_fraction(dna)                       # 0.0-1.0
-
-# Translate in all 6 reading frames
-for strand, seq in [(+1, dna), (-1, dna.reverse_complement())]:
-    for frame in range(3):
-        sub = seq[frame:]
-        sub = sub[: len(sub) - len(sub) % 3]       # whole codons only
-        print(strand, frame, sub.translate(table=11))
-
-# Build a record and write it
-rec = SeqRecord(dna, id="my_gene", description="example sequence")
-SeqIO.write([rec], "my_gene.fasta", "fasta")
-
-# Translate a nucleotide FASTA of CDSs into proteins
-proteins = (
-    SeqRecord(r.seq.translate(table=11, to_stop=True), id=r.id, description="")
-    for r in SeqIO.parse("cds.fna", "fasta")
-)
-SeqIO.write(proteins, "proteins.faa", "fasta")
+for record in SeqIO.parse("data/smeliloti.fasta", "fasta"):
+    gc = gc_fraction(record.seq) * 100
+    print(record.id, len(record.seq), round(gc, 2))
 ```
 
-## GenBank files and features
+- `SeqIO.parse(archivo, formato)` lee las secuencias una por una.
+- Cada `record` tiene `.id` (la primera palabra del encabezado),
+  `.description` (el encabezado completo) y `.seq` (la secuencia).
+- `gc_fraction` devuelve el GC como fracción (0 a 1). Por eso lo multiplicamos
+  por 100.
+- `round(gc, 2)` redondea a 2 decimales.
 
+**Resultado:**
+```text
+NC_003047.1 3654135 62.73
+NC_003037.1 1354226 60.37
+NC_003078.1 1683333 62.42
+```
+
+Son los mismos valores que obtuvimos con Unix en A4 y A6.
+
+### C2. Filtrar secuencias y guardarlas en un FASTA nuevo
+
+Guardar solo los plásmidos.
+
+`scripts/c2_filtrar_plasmidos.py`
 ```python
 from Bio import SeqIO
 
-for record in SeqIO.parse("genome.gbk", "genbank"):
-    print(record.id, record.description, len(record))
-    print(record.annotations.get("organism"))
+plasmidos = []
+for record in SeqIO.parse("data/smeliloti.fasta", "fasta"):
+    if "plasmid" in record.description:
+        plasmidos.append(record)
 
-    for feature in record.features:
-        if feature.type != "CDS":
-            continue
-        q = feature.qualifiers
-        locus = q.get("locus_tag", ["NA"])[0]
-        product = q.get("product", ["NA"])[0]
-        start = int(feature.location.start) + 1   # Biopython is 0-based
-        end = int(feature.location.end)
-        strand = "+" if feature.location.strand == 1 else "-"
-        print(locus, start, end, strand, product)
+SeqIO.write(plasmidos, "results/plasmidos.fasta", "fasta")
+print("Secuencias guardadas:", len(plasmidos))
+```
 
-        nucleotide = feature.extract(record.seq)  # handles strand and joins
-        protein = q.get("translation", [""])[0]
+- `plasmidos = []` crea una lista vacía.
+- `.append(record)` agrega a la lista cada secuencia cuyo encabezado contiene
+  la palabra "plasmid".
+- `SeqIO.write(lista, archivo, formato)` guarda la lista en un archivo.
 
-# Write all CDS proteins to a FASTA
-from Bio.SeqRecord import SeqRecord
+**Resultado:**
+```text
+Secuencias guardadas: 2
+```
+
+### C3. Operaciones con una secuencia
+
+`scripts/c3_operaciones_seq.py`
+```python
 from Bio.Seq import Seq
 
-def cds_proteins(path):
-    for record in SeqIO.parse(path, "genbank"):
-        for f in record.features:
-            if f.type == "CDS" and "translation" in f.qualifiers:
-                yield SeqRecord(
-                    Seq(f.qualifiers["translation"][0]),
-                    id=f.qualifiers.get("locus_tag", ["NA"])[0],
-                    description=f.qualifiers.get("product", [""])[0],
-                )
+dna = Seq("ATGAAACGCATTAGCACCACCATTACCACCACCATCACCATTACCACAGGTAACGGTGCGGGCTGA")
 
-SeqIO.write(cds_proteins("genome.gbk"), "proteins.faa", "fasta")
-
-# Find features overlapping a position
-pos = 150000
-hits = [f for f in record.features if pos in f.location and f.type == "CDS"]
+print("Longitud:             ", len(dna))
+print("Complemento:          ", dna.complement())
+print("Complemento reverso:  ", dna.reverse_complement())
+print("ARN:                  ", dna.transcribe())
+print("Proteína:             ", dna.translate(table=11))
+print("Proteína (hasta stop):", dna.translate(table=11, to_stop=True))
 ```
 
-## FASTQ and quality scores
+`table=11` es el código genético de bacterias. `to_stop=True` se detiene en el
+primer codón de paro en lugar de escribir `*`.
 
+**Resultado:**
+```text
+Longitud:              66
+Complemento:           TACTTTGCGTAATCGTGGTGGTAATGGTGGTGGTAGTGGTAATGGTGTCCATTGCCACGCCCGACT
+Complemento reverso:   TCAGCCCGCACCGTTACCTGTGGTAATGGTGATGGTGGTGGTAATGGTGGTGCTAATGCGTTTCAT
+ARN:                   AUGAAACGCAUUAGCACCACCAUUACCACCACCAUCACCAUUACCACAGGUAACGGUGCGGGCUGA
+Proteína:              MKRISTTITTTITITTGNGAG*
+Proteína (hasta stop): MKRISTTITTTITITTGNGAG
+```
+
+### C4. Leer un GenBank: contar genes
+
+Un archivo GenBank tiene la secuencia y además las **features**: los genes,
+CDS, rRNA, tRNA, etc. que están anotados.
+
+`scripts/c4_contar_genes.py`
 ```python
-import gzip
-from statistics import mean
 from Bio import SeqIO
 
-with gzip.open("reads.fastq.gz", "rt") as fh:
-    for record in SeqIO.parse(fh, "fastq"):
-        quals = record.letter_annotations["phred_quality"]  # list of ints
-        print(record.id, len(record), mean(quals))
-        break
-
-# Keep reads with mean quality >= 20 and length >= 50
-def good_reads(handle, min_q=20, min_len=50):
-    for r in SeqIO.parse(handle, "fastq"):
-        if len(r) >= min_len and mean(r.letter_annotations["phred_quality"]) >= min_q:
-            yield r
-
-with gzip.open("reads.fastq.gz", "rt") as fin, gzip.open("filtered.fastq.gz", "wt") as fout:
-    n = SeqIO.write(good_reads(fin), fout, "fastq")
-print(f"{n} reads kept")
-
-# Fast iteration for very large files (tuples of strings, no SeqRecord overhead)
-from Bio.SeqIO.QualityIO import FastqGeneralIterator
-with gzip.open("reads.fastq.gz", "rt") as fh:
-    n_reads = sum(1 for _ in FastqGeneralIterator(fh))
+for record in SeqIO.parse("data/smeliloti.gbk", "genbank"):
+    cds = 0
+    rrna = 0
+    trna = 0
+    for feature in record.features:
+        if feature.type == "CDS":
+            cds = cds + 1
+        if feature.type == "rRNA":
+            rrna = rrna + 1
+        if feature.type == "tRNA":
+            trna = trna + 1
+    print(record.id, "CDS:", cds, "rRNA:", rrna, "tRNA:", trna)
 ```
 
-## NCBI Entrez
+- `record.features` es la lista de todo lo anotado en esa secuencia.
+- `feature.type` dice qué es cada feature (`"CDS"`, `"rRNA"`, `"tRNA"`, `"gene"`…).
+- Para cada replicón, los contadores empiezan en 0 y suben de 1 en 1.
 
-NCBI asks you to identify yourself. An API key (free, from your NCBI account)
-raises the limit from 3 to 10 requests per second.
+**Resultado:**
+```text
+NC_003047.1 CDS: 3396 rRNA: 9 tRNA: 52
+NC_003037.1 CDS: 1333 rRNA: 0 tRNA: 2
+NC_003078.1 CDS: 1557 rRNA: 0 tRNA: 1
+```
 
+Casi todos los rRNA y tRNA están en el cromosoma.
+
+### C5. Crear una tabla de genes a partir de un GenBank
+
+Una fila por cada gen que codifica proteína, con el replicón, el locus tag, las
+coordenadas, la hebra, la longitud de la proteína y su función.
+
+`scripts/c5_tabla_genes.py`
 ```python
-from Bio import Entrez, SeqIO
+from Bio import SeqIO
 
-Entrez.email = "you@example.com"     # required
-# Entrez.api_key = "YOUR_API_KEY"    # optional
+salida = open("results/tabla_genes.tsv", "w")
+salida.write("replicon\tlocus_tag\tinicio\tfin\thebra\tlongitud_aa\tproducto\n")
 
-# Search: get IDs matching a query
-handle = Entrez.esearch(db="nucleotide",
-                        term="Campylobacter jejuni[Organism] AND complete genome[Title]",
-                        retmax=20)
-result = Entrez.read(handle)
-handle.close()
-print(result["Count"], result["IdList"])
+for record in SeqIO.parse("data/smeliloti.gbk", "genbank"):
+    for feature in record.features:
+        # solo genes que codifican proteína (los pseudogenes no tienen "translation")
+        if feature.type == "CDS" and "translation" in feature.qualifiers:
+            locus = feature.qualifiers["locus_tag"][0]
+            producto = feature.qualifiers["product"][0]
+            proteina = feature.qualifiers["translation"][0]
+            inicio = feature.location.start + 1    # Biopython empieza a contar en 0
+            fin = feature.location.end
+            hebra = feature.location.strand        # 1 = hebra +, -1 = hebra -
+            salida.write(f"{record.id}\t{locus}\t{inicio}\t{fin}\t{hebra}\t{len(proteina)}\t{producto}\n")
 
-# Fetch sequences as FASTA or GenBank
-handle = Entrez.efetch(db="nucleotide", id="NC_000913.3", rettype="fasta", retmode="text")
-record = SeqIO.read(handle, "fasta")
-handle.close()
-
-handle = Entrez.efetch(db="nucleotide", id="NC_000913.3", rettype="gbwithparts", retmode="text")
-SeqIO.write(SeqIO.read(handle, "genbank"), "ecoli.gbk", "genbank")
-handle.close()
-
-# Fetch many IDs at once (batches of ~200)
-ids = ["NC_000913.3", "NC_002163.1"]
-handle = Entrez.efetch(db="nucleotide", id=",".join(ids), rettype="fasta", retmode="text")
-records = list(SeqIO.parse(handle, "fasta"))
-handle.close()
-
-# Summaries (lightweight metadata) for the IDs found by esearch
-handle = Entrez.esummary(db="nucleotide", id=",".join(result["IdList"]))
-summaries = Entrez.read(handle)
-handle.close()
-for s in summaries:
-    print(s["AccessionVersion"], s["Title"], int(s["Length"]))
-
-# Links between databases, e.g. nucleotide -> biosample
-handle = Entrez.elink(dbfrom="nucleotide", db="biosample", id=result["IdList"][0])
-links = Entrez.read(handle)
-handle.close()
-biosample_uids = [l["Id"] for db in links[0]["LinkSetDb"] for l in db["Link"]]
-
-# BioSample attributes (geographic location, host, isolation source...)
-# Entrez.read() does not parse BioSample XML well, so use ElementTree
-import xml.etree.ElementTree as ET
-
-handle = Entrez.efetch(db="biosample", id="SAMN08180388", retmode="xml")
-root = ET.fromstring(handle.read())
-handle.close()
-for sample in root.iter("BioSample"):
-    attrs = {a.get("harmonized_name") or a.get("attribute_name"): a.text
-             for a in sample.iter("Attribute")}
-    print(sample.get("accession"), attrs.get("geo_loc_name"), attrs.get("host"))
+salida.close()
 ```
 
-## Pairwise alignment
+- `open(archivo, "w")` abre un archivo para escribir y `.close()` lo cierra al
+  final.
+- `feature.qualifiers` es un diccionario con la información del gen. Cada
+  valor es una **lista**, por eso se usa `[0]` para sacar el texto.
+- `f"...{variable}..."` (un *f-string*) mete el valor de cada variable dentro
+  del texto. `\t` es un tabulador y `\n` un salto de línea.
 
-```python
-from Bio import Align
-from Bio.Align import substitution_matrices
-
-# Global DNA alignment
-aligner = Align.PairwiseAligner()
-aligner.mode = "global"            # or "local"
-aligner.match_score = 2
-aligner.mismatch_score = -1
-aligner.open_gap_score = -5
-aligner.extend_gap_score = -1
-
-alignments = aligner.align("GATTACAGATTACA", "GATCACAGTTACA")
-best = alignments[0]
-print(best.score)
-print(best)
-
-# Score only (faster when you don't need the alignment)
-aligner.score("GATTACA", "GATCACA")
-
-# Protein local alignment with BLOSUM62
-aligner = Align.PairwiseAligner()
-aligner.mode = "local"
-aligner.substitution_matrix = substitution_matrices.load("BLOSUM62")
-aligner.open_gap_score = -11
-aligner.extend_gap_score = -1
-best = aligner.align("MKTAYIAKQRQISFVKSHFSRQ", "MKTAYIAKQRQLSFVKSHF")[0]
-print(best)
-
-# Percent identity over aligned columns
-counts = best.counts()
-print(100 * counts.identities / (counts.identities + counts.mismatches))
-```
-
-## Multiple sequence alignments
-
-```python
-from Bio import AlignIO
-from collections import Counter
-
-aln = AlignIO.read("alignment.fasta", "fasta")
-print(f"{len(aln)} sequences, {aln.get_alignment_length()} columns")
-
-for record in aln:
-    print(record.id, record.seq[:50])
-
-aln[:, 100:200]                       # slice columns (a sub-alignment)
-column = aln[:, 10]                   # a single column as a string
-
-# Convert formats (e.g. for RAxML / PhyML)
-AlignIO.convert("alignment.fasta", "fasta", "alignment.phy", "phylip-relaxed")
-
-# Simple majority consensus
-consensus = "".join(
-    Counter(aln[:, i]).most_common(1)[0][0]
-    for i in range(aln.get_alignment_length())
-)
-
-# Fraction of gaps per sequence
-for record in aln:
-    print(record.id, record.seq.count("-") / len(record.seq))
-```
-
-## Phylogenetic trees
-
-```python
-from Bio import Phylo
-
-tree = Phylo.read("tree.nwk", "newick")
-Phylo.draw_ascii(tree)                     # quick look in the terminal
-
-leaves = [t.name for t in tree.get_terminals()]
-print(len(leaves), leaves[:5])
-
-# Root with an outgroup and write the tree back out
-tree.root_with_outgroup("Outgroup_species")
-Phylo.write(tree, "tree.rooted.nwk", "newick")
-
-# Distance between two leaves
-tree.distance("taxonA", "taxonB")
-
-# Most recent common ancestor of a group and its leaves
-mrca = tree.common_ancestor("taxonA", "taxonB")
-print([t.name for t in mrca.get_terminals()])
-
-# Prune a leaf
-tree.prune("taxonC")
-
-# Plot with matplotlib
-import matplotlib.pyplot as plt
-fig, ax = plt.subplots(figsize=(8, 10))
-Phylo.draw(tree, axes=ax, do_show=False)
-fig.savefig("tree.pdf")
-```
-
-## Parsing BLAST results
-
-Run BLAST with tabular output: `blastp -query q.faa -db db -outfmt 6 -out hits.tsv`.
-
-```python
-from Bio import SearchIO
-
-# Best hit per query from tabular (outfmt 6) output
-for qresult in SearchIO.parse("hits.tsv", "blast-tab"):
-    best_hit = qresult.hits[0]
-    best_hsp = best_hit.hsps[0]
-    print(qresult.id, best_hit.id, best_hsp.ident_pct, best_hsp.evalue, best_hsp.bitscore)
-
-# Keep hits with e-value < 1e-10 and identity >= 40%
-for qresult in SearchIO.parse("hits.tsv", "blast-tab"):
-    good = qresult.hsp_filter(lambda h: h.evalue < 1e-10 and h.ident_pct >= 40)
-    for hit in good:
-        print(qresult.id, hit.id)
-
-# Index a large BLAST XML (outfmt 5) and access a query by ID
-idx = SearchIO.index("hits.xml", "blast-xml")
-print(idx["query_1"])
-```
-
-Tabular BLAST output is also easy to handle with plain Unix tools:
+Revisa el resultado:
 
 ```bash
-# Column names for -outfmt 6:
-# qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore
-
-awk -F'\t' '!seen[$1]++' hits.tsv                       # best hit per query (BLAST order)
-sort -k1,1 -k12,12gr hits.tsv | awk '!seen[$1]++'       # ... by highest bitscore
-awk -F'\t' '$3 >= 90 && $11 < 1e-20' hits.tsv           # filter by identity and e-value
-cut -f1 hits.tsv | sort -u | wc -l                      # queries with at least one hit
+head -n 4 results/tabla_genes.tsv
+wc -l results/tabla_genes.tsv
 ```
+
+**Resultado:**
+```text
+replicon	locus_tag	inicio	fin	hebra	longitud_aa	producto
+NC_003047.1	SM_RS00005	1	3654135	-1	343	uroporphyrinogen decarboxylase
+NC_003047.1	SM_RS00010	478	1299	1	273	pyruvate, water dikinase regulatory protein
+NC_003047.1	SM_RS00015	1347	1946	1	199	Maf-like protein
+5985 results/tabla_genes.tsv
+```
+
+Son 5,984 genes más la línea de encabezado. El primer gen aparece con
+`inicio=1` y `fin=3654135` porque **cruza el origen** del cromosoma circular:
+una parte está al final de la secuencia y otra al principio.
+
+### C6. Extraer proteínas de interés a un FASTA
+
+Vamos a sacar todas las proteínas *nod* (de nodulación), que la bacteria usa
+para comunicarse con la planta.
+
+`scripts/c6_proteinas_nod.py`
+```python
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+
+proteinas = []
+for record in SeqIO.parse("data/smeliloti.gbk", "genbank"):
+    for feature in record.features:
+        if feature.type == "CDS" and "gene" in feature.qualifiers and "translation" in feature.qualifiers:
+            gen = feature.qualifiers["gene"][0]
+            if gen.startswith("nod"):
+                nueva = SeqRecord(Seq(feature.qualifiers["translation"][0]),
+                                  id=feature.qualifiers["locus_tag"][0],
+                                  description=gen)
+                proteinas.append(nueva)
+
+SeqIO.write(proteinas, "results/proteinas_nod.faa", "fasta")
+print("Proteínas nod guardadas:", len(proteinas))
+```
+
+- No todos los CDS tienen nombre de gen. Por eso primero revisamos que
+  `"gene"` exista.
+- `gen.startswith("nod")` es verdadero si el nombre empieza con "nod".
+- `SeqRecord(...)` crea una secuencia nueva con su ID y descripción, lista para
+  guardar con `SeqIO.write`.
+
+```bash
+python3 scripts/c6_proteinas_nod.py
+grep "^>" results/proteinas_nod.faa | head -n 5
+```
+
+**Resultado:**
+```text
+Proteínas nod guardadas: 11
+>SM_RS26775 nodD2
+>SM_RS26830 nodL
+>SM_RS27050 nodD3
+>SM_RS27090 nodQ
+>SM_RS27105 nodI
+```
+
+### C7. Leer las calidades de un FASTQ
+
+Biopython convierte los caracteres de calidad en **valores Phred**. Q30
+significa una probabilidad de 1 en 1,000 de que la base esté mal leída.
+
+`scripts/c7_calidad_fastq.py`
+```python
+import gzip
+from Bio import SeqIO
+
+archivo = gzip.open("data/SRR2589044_1.fastq.gz", "rt")
+
+contador = 0
+for record in SeqIO.parse(archivo, "fastq"):
+    calidades = record.letter_annotations["phred_quality"]
+    promedio = sum(calidades) / len(calidades)
+    print(record.id, "Q promedio:", round(promedio, 1), "Q mínima:", min(calidades))
+    contador = contador + 1
+    if contador == 5:
+        break
+
+archivo.close()
+```
+
+- `gzip.open(..., "rt")` abre un archivo comprimido como texto (`r` = leer,
+  `t` = texto).
+- `calidades` es una lista de números, uno por base.
+- `break` detiene el loop. Aquí paramos después de 5 lecturas.
+
+**Resultado:**
+```text
+SRR2589044.1 Q promedio: 36.4 Q mínima: 31
+SRR2589044.2 Q promedio: 33.0 Q mínima: 6
+SRR2589044.3 Q promedio: 35.8 Q mínima: 33
+SRR2589044.4 Q promedio: 36.6 Q mínima: 29
+SRR2589044.5 Q promedio: 19.5 Q mínima: 2
+```
+
+La lectura 5 tiene mala calidad (Q promedio de 19.5).
+
+### C8. Filtrar lecturas por calidad
+
+Guardar solo las lecturas con una calidad promedio de al menos 30.
+
+`scripts/c8_filtrar_calidad.py`
+```python
+import gzip
+from Bio import SeqIO
+
+entrada = gzip.open("data/SRR2589044_1.fastq.gz", "rt")
+
+buenas = []
+total = 0
+for record in SeqIO.parse(entrada, "fastq"):
+    total = total + 1
+    calidades = record.letter_annotations["phred_quality"]
+    promedio = sum(calidades) / len(calidades)
+    if promedio >= 30:
+        buenas.append(record)
+entrada.close()
+
+salida = gzip.open("results/SRR2589044_1.q30.fastq.gz", "wt")
+SeqIO.write(buenas, salida, "fastq")
+salida.close()
+
+print("Lecturas totales:", total)
+print("Lecturas con Q promedio >= 30:", len(buenas))
+```
+
+`gzip.open(..., "wt")` abre un archivo comprimido para escribir texto (`w` =
+escribir).
+
+**Resultado:**
+```text
+Lecturas totales: 50000
+Lecturas con Q promedio >= 30: 38534
+```
+
+Se conserva el 77% de las lecturas. Este filtro sirve para aprender, pero con
+datos reales conviene usar un programa como `fastp`, que también quita
+adaptadores y procesa los dos archivos del par juntos.
 
 ---
 
-# Regex quick reference
+## Parte D: Unix + Biopython: analizar una tabla de genes
 
-| Pattern | Matches |
+La tabla que creaste con Biopython en C5 es un archivo de texto con columnas
+separadas por tabuladores. Con comandos de Unix puedes responder preguntas
+sobre ella muy rápido.
+
+Columnas de `results/tabla_genes.tsv`:
+
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|---|---|---|---|---|---|---|
+| replicon | locus_tag | inicio | fin | hebra | longitud_aa | producto |
+
+### D1. ¿Cuántos genes hay en cada replicón?
+
+```bash
+tail -n +2 results/tabla_genes.tsv | cut -f1 | sort | uniq -c
+```
+
+- `tail -n +2` muestra desde la línea 2, o sea, quita el encabezado.
+- `cut -f1` se queda con la columna del replicón.
+- `sort | uniq -c` cuenta cuántas veces aparece cada uno.
+
+**Resultado:**
+```text
+   1180 NC_003037.1
+   3329 NC_003047.1
+   1475 NC_003078.1
+```
+
+### D2. Genes en cada hebra, por replicón
+
+```bash
+tail -n +2 results/tabla_genes.tsv | cut -f1,5 | sort | uniq -c
+```
+
+Ahora contamos combinaciones de dos columnas: replicón y hebra.
+
+**Resultado:**
+```text
+    571 NC_003037.1	-1
+    609 NC_003037.1	1
+   1617 NC_003047.1	-1
+   1712 NC_003047.1	1
+    716 NC_003078.1	-1
+    759 NC_003078.1	1
+```
+
+### D3. Las 5 proteínas más largas
+
+```bash
+tail -n +2 results/tabla_genes.tsv | sort -t $'\t' -k6,6nr | head -n 5 | cut -f1,2,6,7
+```
+
+- `sort -k6,6nr` ordena por la columna 6 (longitud), como número y de mayor a
+  menor.
+- `-t $'\t'` le dice a `sort` que las columnas están separadas por tabulador.
+  Hace falta porque la columna de producto tiene espacios.
+
+**Resultado:**
+```text
+NC_003047.1	SM_RS16840	2832	cyclic beta-(1,2)-glucan synthase
+NC_003047.1	SM_RS02940	2504	type I polyketide synthase
+NC_003078.1	SM_RS21975	2288	autotransporter
+NC_003047.1	SM_RS09335	2089	apolipoprotein A-IV repeat region-like domain-containing protein
+NC_003047.1	SM_RS15355	1869	translocation/assembly module TamB domain-containing protein
+```
+
+### D4. Las funciones más comunes
+
+```bash
+tail -n +2 results/tabla_genes.tsv | cut -f7 | sort | uniq -c | sort -nr | head -n 5
+```
+
+**Resultado:**
+```text
+    548 hypothetical protein
+    152 ABC transporter permease
+    111 ABC transporter ATP-binding protein
+     94 ABC transporter substrate-binding protein
+     62 LysR family transcriptional regulator
+```
+
+Hay muchos transportadores ABC, algo típico de bacterias del suelo que
+aprovechan muchos nutrientes distintos.
+
+### D5. ¿Dónde están los genes de nodulación?
+
+```bash
+grep -i "nodulation" results/tabla_genes.tsv | cut -f1 | sort | uniq -c
+```
+
+`grep -i` busca sin importar mayúsculas o minúsculas.
+
+**Resultado:**
+```text
+     13 NC_003037.1
+```
+
+Todos los genes anotados como de nodulación están en **pSymA**, el
+megaplásmido simbiótico. Con unos pocos comandos de Unix encontraste algo con
+significado biológico.
+
+---
+
+## Resumen de comandos
+
+| Tarea | Comando |
 |---|---|
-| `.` | any single character |
-| `^` / `$` | start / end of line |
-| `[ACGT]` | one of these characters |
-| `[^ACGT]` | any character except these |
-| `[0-9]`, `[A-Z]` | a digit, an uppercase letter |
-| `*` | 0 or more of the previous item |
-| `+` | 1 or more (extended regex: `grep -E`, `sed -E`) |
-| `?` | 0 or 1 (extended regex) |
-| `{n}`, `{n,m}` | exactly n, between n and m (extended regex) |
-| `(a\|b)` | a or b (extended regex) |
-| `\t` | tab (awk, sed, `grep -P`) |
-| `\b` | word boundary (`grep -P`) |
-
-Common accession patterns:
-
-| Type | Example | Regex (`grep -oE`) |
-|---|---|---|
-| BioSample | `SAMN02604091`, `SAMEA1705929`, `SAMD00620689` | `SAM(N\|EA\|D)[0-9]+` |
-| BioProject | `PRJNA224116` | `PRJ(NA\|EB\|DB)[0-9]+` |
-| Assembly | `GCF_000005845.2` | `GC[AF]_[0-9]{9}\.[0-9]+` |
-| SRA run | `SRR1234567`, `ERR123456` | `[SED]RR[0-9]+` |
-| RefSeq nucleotide | `NC_000913.3`, `NZ_CP012345.1` | `N[CZ]_[A-Z0-9]+\.[0-9]+` |
-| RefSeq protein | `WP_000123456.1` | `[WNXY]P_[0-9]+\.[0-9]+` |
+| Contar secuencias en un FASTA | `grep -c "^>" archivo.fasta` |
+| Listar IDs | `grep "^>" archivo.fasta \| cut -d' ' -f1 \| tr -d '>'` |
+| Extraer una secuencia (FASTA linealizado) | `grep -A 1 "^>ID" archivo.fasta` |
+| Contar lecturas en un FASTQ | `echo $(( $(zcat archivo.fastq.gz \| wc -l) / 4 ))` |
+| Secuencias de un FASTQ | `sed -n '2~4p'` |
+| Ver un archivo `.gz` | `zcat archivo.gz \| head` |
+| Líneas que coinciden / que no coinciden | `grep "x"` / `grep -v "x"` |
+| Elegir columnas | `cut -f1,3` |
+| Contar valores | `sort \| uniq -c \| sort -nr` |
+| Ordenar por una columna numérica | `sort -t $'\t' -k2,2nr` |
+| Buscar y reemplazar | `sed 's/viejo/nuevo/'` |
+| Quitar el encabezado | `tail -n +2` |
+| Juntar tablas lado a lado | `paste tabla1.tsv tabla2.tsv` |
+| Repetir para muchos archivos | `for f in *.fasta; do ...; done` |
+| Leer secuencias en Python | `SeqIO.parse(archivo, "fasta")` |
+| Guardar secuencias en Python | `SeqIO.write(lista, archivo, "fasta")` |
+| Features de un GenBank | `for feature in record.features:` |
+| Calidades de un FASTQ | `record.letter_annotations["phred_quality"]` |
