@@ -8,29 +8,27 @@ layout: page
 #ambiente para ejecutar fastqc
 conda create -c bioconda -c conda-forge fastqc -n fastqc -y
 #Ambiente para fastp y spades
-conda create -n Genomics -y
-#Instalar paquetes en el ambiente
-conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 spades fastp -n Genomics
-# Instalar otros ambientes
+conda create -n Genomics -c conda-forge -c bioconda -c AgBiome python=3.10 spades fastp -y
+# Crear otros ambientes
 conda create -c bioconda -c conda-forge quast -n quast -y
-conda create -c conda-forge -c bioconda -c defaults prokka -n prokka -y
+conda create -c conda-forge -c bioconda -c defaults bakta -n bakta -y
 conda create -n checkm2 -c bioconda -c conda-forge checkm2 -y
 ```
 ## Para MAC
 
 ```yml
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+#fastqc
 conda create -n fastqc
 conda activate fastqc
 brew install fastqc
+conda deactivate
+#fastp y spades
 conda create -n Genomics
-#Instalar paquetes en el ambiente
 conda install -y -c conda-forge -c bioconda -c AgBiome python=3.10 fastp -n Genomics
 conda install y -c conda-forge -c bioconda -c AgBiome python=3.10 spades -n Genomics
-conda deactivate
-conda create -n prokka
-conda activate prokka
-brew install brewsci/bio/prokka
+# Otros ambientes
+conda create -c conda-forge -c bioconda -c defaults bakta -n bakta -y
 conda deactivate
 conda create -n quast
 conda activate quast
@@ -51,7 +49,6 @@ mkdir clase
 #Muévase a la carpeta con el comando cd
 cd clase/
 #Descargue los datos a utilizar
-pip install gdown
 gdown --folder 104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing 
 mv Data 01.Data
 cd 01.Data
@@ -78,10 +75,10 @@ Utiliazremos el parámetro "detect_adapter_per_pe" para detectar si hay residuos
 #Debe crear la carpeta "../03.fastp", inténtelo. 
 conda deactivate
 conda activate Genomics
-mkdir ../03.fastp
+
 for i in `ls *_1.fastq.gz | sed 's/_1.fastq.gz//'`; do  fastp -i $i\_1.fastq.gz -I $i\_2.fastq.gz --detect_adapter_for_pe -o ../03.fastp/$i\_1.fq.gz -O ../03.fastp/$i\_2.fq.gz -h ../03.fastp/$i\_fastq.html -e 30; done
 ```
-Ubique los nuevos contis con los comandos cd y ls :)
+Ubique los nuevos reads con los comandos cd y ls :)
 
 ## Ensamblaje de novo con Spades. 
 Utilizaremos los parámetros "--only-assembler" para que no haga corrección de errores en los reads y los valores de k= 33 y 55 para que sólo haga el ensaamblaje con esos dos valores. Debe ajustar el valor de m según la memoria RAM de la que disponga. Por ejemplo si su computadora tien 16 entonces coloque 14, deje unos 2gb para que no muera. Si cree que su compu es muy lenta use únicamente -k 55
@@ -105,12 +102,13 @@ Si han llegado hasta acá, estoy muy orgulloso!
 
 
 ```
-## Anotación con Prokka
-Utilizaremos Prokka para ver los genes anotados
+## Anotación con Bakta
+Utilizaremos Bakta para ver los genes anotados
 ```yml
 conda deactivate
-conda activate prokka
-prokka --outdir ../06.Prokka --prefix A208b A208b.fasta
+conda activate bakta
+bakta_db download --output ../bakta_db --type light
+bakta --db ../bakta_db A208b.fasta
 ```
 
 ## Checkm2
@@ -146,14 +144,14 @@ En la carpeta 01.Data hay un archivo que se llama "references.txt" este tiene un
 ```yml
 #Cree una nueva carpeta
 cd ~/clase
-mkdir 07.Phylogenomics
+mkdir 08.Phylogenomics
 #Mueva el archivo con la lista de genomas
-mv 01.Data/references.txt 07.Phylogenomics/
+mv 01.Data/references.txt 08.Phylogenomics/
 #Mueva su genoma a la misma carpeta
-cp 04.ASSEMBLY_SPAdes/A208b.fasta 07.Phylogenomics/
-cd 07.Phylogenomics/
+cp 04.ASSEMBLY_SPAdes/A208b.fasta 08.Phylogenomics/
+cd 08.Phylogenomics/
 ```
-Una vez dentro de la carpeta 07.Phylogenomics revise si ya tiene los archivos (el fasta y el txt) con el comando ls. Y ejecute el comando GenFlow.
+Una vez dentro de la carpeta 08.Phylogenomics revise si ya tiene los archivos (el fasta y el txt) con el comando ls. Y ejecute el comando GenFlow.
 ```yml
 GenFlow -g references.txt -f A208b.fasta -t 12 -G 0.8 -F 0.8
 cd results/
@@ -161,6 +159,8 @@ ls
 ```
 En la carpeta results, debe tener un archivo .tree y varios archivos .svg que son los heatmap con los valores de ANI.
 El archivo .tree puede visualizarlo en la página de [iTOL](https://itol.embl.de).
+
+## Hasta aquí la clase!!! muchas gracias
 
 ## Uso del Kabré
 Muy bien! Ahora intentemos hacerlo en el servidor del CENAT
