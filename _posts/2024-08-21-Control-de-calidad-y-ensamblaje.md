@@ -55,7 +55,7 @@ mkdir clase
 #Muévase a la carpeta con el comando cd
 cd clase/
 #Descargue los datos a utilizar
-gdown --folder 104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing 
+gdown --folder "https://drive.google.com/drive/folders/1kDb1TZeXlBvY0BWmk7ia8pXPp7-GSeW-?usp=sharing" 
 mv Data 01.Data
 cd 01.Data
 ```
