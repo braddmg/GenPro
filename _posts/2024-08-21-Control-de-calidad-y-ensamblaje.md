@@ -12,7 +12,10 @@ conda create -n Genomics -c conda-forge -c bioconda -c AgBiome python=3.10 spade
 # Crear otros ambientes
 conda create -c bioconda -c conda-forge quast -n quast -y
 conda create -c conda-forge -c bioconda -c defaults bakta -n bakta -y
-conda create -n checkm2 -c bioconda -c conda-forge checkm2 -y
+#checkm2
+git clone --recursive https://github.com/chklovski/checkm2.git && cd checkm2
+conda env create -n checkm2 -f checkm2.yml
+conda activate checkm2
 ```
 ## Para MAC
 
@@ -34,13 +37,16 @@ conda create -n quast
 conda activate quast
 brew install quast
 conda deactivate
-conda create -n checkm2 -c bioconda -c conda-forge checkm2 -y
+
+#checkm2 no estoy seguro si funciona para MAC
+git clone --recursive https://github.com/chklovski/checkm2.git && cd checkm2
+conda env create -n checkm2 -f checkm2.yml
+conda activate checkm2
 ```
 ## Descargar base de datos
 Este comando puede tardar un rato
 ```yml
-mkdir ~/databases
-conda run -n checkm2 checkm2 database --download --path ~/databases
+bin/checkm2 database --download
 ```
 ## Descargar los datos
 ```yml
