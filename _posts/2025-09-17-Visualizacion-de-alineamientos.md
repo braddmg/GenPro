@@ -57,6 +57,3 @@ mv.savefig("Fic_plot.png")
 
 ```
 
-## Tarea
-Busque al menos 3 (pueden ser más) secuencias de algún gen de interés en diferentes especies y anote alguna de las mutaciones y gaps (indels) encontrados. 
-Debe dar una breve introducción del gen utilizado.
