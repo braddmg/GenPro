@@ -17,7 +17,7 @@ git clone --recursive https://github.com/chklovski/checkm2.git && cd checkm2
 conda env create -n checkm2 -f checkm2.yml
 conda activate checkm2
 #amrfinder
-conda create -y -n annotation -c conda-forge -c bioconda -c defaults ncbi-amrfinderplus
+conda create -y -n amrfinder -c conda-forge -c bioconda -c defaults ncbi-amrfinderplus
 ```
 ## Para MAC
 
@@ -39,13 +39,11 @@ conda create -n quast
 conda activate quast
 brew install quast
 conda deactivate
-
 #checkm2 no estoy seguro si funciona para MAC
 git clone --recursive https://github.com/chklovski/checkm2.git && cd checkm2
 conda env create -n checkm2 -f checkm2.yml
-
 #amrfinder
-conda create -y -n annotation -c conda-forge -c bioconda -c defaults ncbi-amrfinderplus
+conda create -y -n amrfinder -c conda-forge -c bioconda -c defaults ncbi-amrfinderplus
 ```
 ## Descargar base de datos
 Este comando puede tardar un rato
@@ -117,16 +115,6 @@ quast.py A208b.fasta -o ../05.QUAST/A208b
 ```
 Si han llegado hasta acá, estoy muy orgulloso!
 
-```
-## Anotación con Bakta
-Utilizaremos Bakta para ver los genes anotados
-```yml
-conda deactivate
-conda activate bakta
-bakta_db download --output ../bakta_db --type light
-bakta --db ../bakta_db A208b.fasta
-```
-
 ## Checkm2
 Determinar contaminación y completitud del genoma
 ```yml
@@ -136,19 +124,25 @@ mkdir fastas
 mv A208b.fasta fastas/ 
 checkm2 predict --input fastas --output-directory ../07.checkm2 -x fasta --threads 8 --database_path ~/databases/CheckM2_database/uniref100.KO.1.dmnd --force
 ```
-# Anotación
+## Anotación con Bakta
+Utilizaremos Bakta para ver los genes anotados
+```yml
+conda deactivate
+conda activate bakta
+bakta_db download --output ../bakta_db --type light
+bakta --db ../bakta_db A208b.fasta
+```
 ## Anotación de genes de resistencia
 ```yml
+conda deactivate
+conda activate annotation
 amrfinder \
   -n 01.Data/INISA09.fa \
   --threads 8 \
   --plus \
   -o results/amrfinder/amrfinder_nucl.tsv  
 ```
-## Anotación con Bakta 
-```yml
-bakta --db <db-path> genome.fasta
-```
+
 ## Hasta aquí la práctica, ignorar lo siguiente
 
 # OPCIONAL: Phylogenomics made easy
