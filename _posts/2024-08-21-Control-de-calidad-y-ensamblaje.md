@@ -16,6 +16,8 @@ conda create -c conda-forge -c bioconda -c defaults bakta -n bakta -y
 git clone --recursive https://github.com/chklovski/checkm2.git && cd checkm2
 conda env create -n checkm2 -f checkm2.yml
 conda activate checkm2
+#amrfinder
+conda create -y -n annotation -c conda-forge -c bioconda -c defaults ncbi-amrfinderplus
 ```
 ## Para MAC
 
@@ -41,12 +43,22 @@ conda deactivate
 #checkm2 no estoy seguro si funciona para MAC
 git clone --recursive https://github.com/chklovski/checkm2.git && cd checkm2
 conda env create -n checkm2 -f checkm2.yml
-conda activate checkm2
+
+#amrfinder
+conda create -y -n annotation -c conda-forge -c bioconda -c defaults ncbi-amrfinderplus
 ```
 ## Descargar base de datos
 Este comando puede tardar un rato
 ```yml
+cd
+#checkm2
+conda activate checkm2
 bin/checkm2 database --download
+conda deactivate
+#amrfinder
+conda run -n annotation amrfinder -u
+#Bakta
+bakta_db download bakta_db --type light
 ```
 ## Descargar los datos
 ```yml
@@ -59,8 +71,7 @@ gdown --folder "https://drive.google.com/drive/folders/1kDb1TZeXlBvY0BWmk7ia8pXP
 mv Data 01.Data
 cd 01.Data
 ```
-Si tiene MAC debe descargarlos manualmente con el siguiente link de [google drive](https://drive.google.com/drive/folders/104Tl8ou0AFPWXpn5BII_3H9a7BJeXGgU?usp=sharing
-)
+Si tiene MAC debe descargarlos manualmente con el siguiente link de [google drive](https://drive.google.com/drive/folders/1kDb1TZeXlBvY0BWmk7ia8pXPp7-GSeW-?usp=sharing)
 
 ## Evaluación de la calidad de los reads
 Utilizaremos Fastqc que es un programa que sirve para evaluar la calidad de las secuencias.
@@ -106,7 +117,6 @@ quast.py A208b.fasta -o ../05.QUAST/A208b
 ```
 Si han llegado hasta acá, estoy muy orgulloso!
 
-
 ```
 ## Anotación con Bakta
 Utilizaremos Bakta para ver los genes anotados
@@ -126,6 +136,21 @@ mkdir fastas
 mv A208b.fasta fastas/ 
 checkm2 predict --input fastas --output-directory ../07.checkm2 -x fasta --threads 8 --database_path ~/databases/CheckM2_database/uniref100.KO.1.dmnd --force
 ```
+# Anotación
+## Anotación de genes de resistencia
+```yml
+amrfinder \
+  -n 01.Data/INISA09.fa \
+  --threads 8 \
+  --plus \
+  -o results/amrfinder/amrfinder_nucl.tsv  
+```
+## Anotación con Bakta 
+```yml
+bakta --db <db-path> genome.fasta
+```
+## Hasta aquí la práctica, ignorar lo siguiente
+
 # OPCIONAL: Phylogenomics made easy
 Vamos a ejecutar GenFlow, que nos da como output un árbol filogenómico con un sólo comando. Sorry, no lo he estandarizado para MAC :(
 ```yml
