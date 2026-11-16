@@ -35,6 +35,7 @@ Si buscas una lista rápida de comandos sin explicación, revisa la
 ```bash
 conda create -n biopython -c conda-forge biopython -y
 conda activate biopython
+pip install ncbi-genome-download # extra para parte final
 
 ```
 
