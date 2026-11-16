@@ -434,14 +434,14 @@ Si solo quieres los ensamblados completos (cromosoma cerrado), añade
 
 ### Descargar genomas de una sola especie
 
-Para descargar solo *Sinorhizobium meliloti* (cualquier nivel de ensamblado)
+Para descargar solo *Sinorhizobium meliloti* (solo ensamblajes "completos")
 desde RefSeq, con FASTA y anotaciones GFF:
 
 ```bash
 ncbi-genome-download bacteria \
   --genera "Sinorhizobium meliloti" \
   --formats fasta,gff \
-  --assembly-levels all \
+  --assembly-levels complete \
   --section refseq \
   --metadata-table smeliloti_metadata.tsv \
   --output-folder smeliloti_genomes/
