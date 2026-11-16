@@ -12,6 +12,7 @@ Si buscas una lista rápida de comandos sin explicación, revisa la
 - [1. Descargar los datos](#1-descargar-los-datos)
 - [Parte A: FASTA con Unix](#parte-a-fasta-con-unix)
 - [Parte B: Biopython](#parte-c-biopython)
+- [Descargar genomas de NCBI](#descargar-genomas)
 - [Resumen de comandos](#resumen-de-comandos)
 
 ### Los datos
@@ -383,6 +384,87 @@ NC_003078.1 CDS: 1557 rRNA: 0 tRNA: 1
 ```
 
 Casi todos los rRNA y tRNA están en el cromosoma.
+
+## Descargar genomas
+
+### Descargar todos los genomas de un género: *Tistrella*
+
+*Tistrella* es un género bacteriano de la familia Rhodospirillaceae. Para
+descargar todos sus genomas (todos los niveles de ensamblado) en formato FASTA
+junto con un archivo de metadatos:
+
+```bash
+ncbi-genome-download bacteria \
+  --genera "Tistrella" \
+  --formats fasta,assembly-report \
+  --assembly-levels all \
+  --section genbank \
+  --metadata-table tistrella_metadata.tsv \
+  --output-folder tistrella_genomes/
+```
+
+Esto descarga los genomas en la carpeta `tistrella_genomes/` y guarda una tabla
+TSV con los metadatos de cada ensamblado (accesión, nombre del organismo,
+nivel de ensamblado, fecha de envío, etc.).
+
+Antes de descargar, puedes revisar qué se va a bajar con `--dry-run`:
+
+```bash
+ncbi-genome-download bacteria \
+  --genera "Tistrella" \
+  --formats fasta \
+  --assembly-levels all \
+  --section genbank \
+  --dry-run
+```
+
+**Resultado:**
+```text
+Considering the following 53 assemblies for download:
+GCA_001601315.1	Tistrella mobilis	MCCC 1A02139
+GCA_041468075.1	Tistrella mobilis	L15
+GCA_041468085.1	Tistrella mobilis	L14
+...
+GCA_039631025.1	Tistrella arctica	BH-R2-4
+```
+
+Si solo quieres los ensamblados completos (cromosoma cerrado), añade
+`--assembly-levels complete` — en este caso serían 18 genomas.
+
+### Descargar genomas de una sola especie
+
+Para descargar solo *Sinorhizobium meliloti* (cualquier nivel de ensamblado)
+desde RefSeq, con FASTA y anotaciones GFF:
+
+```bash
+ncbi-genome-download bacteria \
+  --genera "Sinorhizobium meliloti" \
+  --formats fasta,gff \
+  --assembly-levels all \
+  --section refseq \
+  --metadata-table smeliloti_metadata.tsv \
+  --output-folder smeliloti_genomes/
+```
+
+### Opciones más usadas
+
+| Opción | Descripción |
+|---|---|
+| `--genera "Género especie"` | Filtra por nombre de género o especie |
+| `--formats fasta,gff,genbank` | Formatos a descargar (separados por coma) |
+| `--assembly-levels complete` | Nivel de ensamblado: `complete`, `chromosome`, `scaffold`, `contig` o `all` |
+| `--section refseq` / `genbank` | Base de datos de origen |
+| `--metadata-table archivo.tsv` | Guarda metadatos de cada ensamblado |
+| `--dry-run` | Solo muestra qué se descargaría, sin descargar nada |
+| `--parallel 4` | Descarga en paralelo con N hilos |
+| `--taxids 2131` | Filtra por NCBI Taxonomy ID en lugar de nombre |
+
+Los archivos se descargan comprimidos (`.gz`) y organizados por sección,
+grupo taxonómico y accesión. Para descomprimirlos todos:
+
+```bash
+find tistrella_genomes/ -name "*.gz" | xargs -P 4 gunzip
+```
 
 ---
 
